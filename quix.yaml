@@ -36,4 +36,18 @@ deployments:
         value: quix-techdocs-no0_5b_1kchars
 
 # This section describes the Topics of the data pipeline
-topics: []
+topics:
+  - name: raw-text-chunks
+    persisted: false
+    configuration:
+      partitions: 1
+      replicationFactor: 2
+      retentionInMinutes: 1440
+      retentionInBytes: 52428800
+  - name: embeddings-sbert-all-MiniLM-L6-v2
+    persisted: false
+    configuration:
+      partitions: 1
+      replicationFactor: 2
+      retentionInMinutes: 1440
+      retentionInBytes: 52428800
