@@ -68,21 +68,12 @@ def load_quix_docs():
         meta_function=metadata_extractor,
     ).load()
 
-def load_quix_docs_local():
-    html_loader_kwargs = {'open_encoding': 'utf-8'}
-    return DirectoryLoader(
-        r"C:\My Web Sites\QuixDocs\quix.io\docs",
-        glob="**/*.html",
-        loader_cls=BSHTMLLoader,
-        loader_kwargs=html_loader_kwargs
-    ).load()
-
 def simple_extractor(html: str) -> str:
     soup = BeautifulSoup(html, "lxml")
     return re.sub(r"\n\n+", "\n\n", soup.text).strip()
 
 def ingest_docs(use_local=False, local_path='quix_docs.pickle'):
-    if use_local:
+    if os.environ["output"]:
         # Load the docs from the local pickle file
         docs_from_documentation = load_docs_from_file(local_path)
         logger.info(f"Loaded {len(docs_from_documentation)} docs from local file")
@@ -150,7 +141,7 @@ with Producer(
             "doc_content": doctext,
             "doc_source": doc.metadata['source'],
         }
-        
+
         print(f"Producing value: {value}")
         idcounter = idcounter + 1
         producer.produce(
