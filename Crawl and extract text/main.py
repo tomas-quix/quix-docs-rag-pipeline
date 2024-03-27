@@ -4,23 +4,15 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 import re
 import logging
 import uuid
-import json
 import pickle
 from dotenv import load_dotenv
 
 import time
-from bs4 import BeautifulSoup, SoupStrainer
-from langchain_community.document_loaders import RecursiveUrlLoader, SitemapLoader, DirectoryLoader, BSHTMLLoader
 import os
-
-import dotenv
+from bs4 import BeautifulSoup, SoupStrainer
+from langchain_community.document_loaders import SitemapLoader
 from quixstreams.kafka import Producer
-from quixstreams.platforms.quix import QuixKafkaConfigsBuilder, TopicCreationConfigs
-from quixstreams.models.serializers import (
-    JSONSerializer,
-    QuixTimeseriesSerializer,
-    SerializationContext,
-)
+
 
 def save_docs_to_file(docs, file_path):
     with open(file_path, 'wb') as f:
