@@ -115,9 +115,7 @@ print(f"Producing to output topic: {outputtopicname}...\n\n")
 serialize = JSONSerializer()
 
 idcounter = 0
-#with Producer(broker_address=cfgs.pop("bootstrap.servers"), extra_config=cfgs) as producer:
 with Producer(
-    broker_address='localhost:19092',
     extra_config={"allow.auto.create.topics": "true"},
     ) as producer:
     for doc in quixdocs:
