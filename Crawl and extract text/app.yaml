@@ -11,6 +11,11 @@ variables:
     description: 200
     defaultValue: 1000
     required: false
+  - name: textoverlapsize
+    inputType: FreeText
+    description: ''
+    defaultValue: 200
+    required: false
 dockerfile: dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
