@@ -150,6 +150,7 @@ with Producer(
             "doc_content": doctext,
             "doc_source": doc.metadata['source'],
         }
+        
         print(f"Producing value: {value}")
         idcounter = idcounter + 1
         producer.produce(
