@@ -65,7 +65,7 @@ def simple_extractor(html: str) -> str:
     soup = BeautifulSoup(html, "lxml")
     return re.sub(r"\n\n+", "\n\n", soup.text).strip()
 
-def ingest_docs(use_local=False, local_path='quix_docs.pickle'):
+def ingest_docs(use_local=False, local_path='./state/quix_docs.pickle'):
     if use_local:
         # Load the docs from the local pickle file
         docs_from_documentation = load_docs_from_file(local_path)
