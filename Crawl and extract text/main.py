@@ -33,7 +33,7 @@ def load_docs_from_file(file_path):
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 outputtopicname = os.environ["output"]
-use_local_bool = os.environ['use_locaL_pickle'] == "True"
+use_local_bool = os.environ['use_local_crawl_pickle'] == "True"
 
 textchunksize = os.environ['textchunksize']
 textoverlapsize = os.environ['textoverlapsize']
