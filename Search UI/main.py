@@ -22,8 +22,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 openai_apikey = os.environ['OPENAI_API_KEY']
-os.environ['collectionname'] = "quix-techdocs-no0_5b_1kchars" # "quix-techdocs-no0_5b"
-
+#TEST COLLECTIONS: "quix-techdocs-no0_5b_1kchars" # "quix-techdocs-no0_5b"
 
 collection = os.environ['collectionname']
 embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
@@ -42,7 +41,7 @@ async def on_chat_start():
     
     aclient = AsyncQdrantClient(
                     url="https://620342be-1e5e-401c-98da-42bcaddaed57.us-east4-0.gcp.cloud.qdrant.io:6333",
-                    api_key=os.environ['qdrant_apikey'],
+                    api_key=os.environ['QDRANT_APIKEY'],
                     timeout=100,
                     grpc_port=6334,
                     prefer_grpc=True
