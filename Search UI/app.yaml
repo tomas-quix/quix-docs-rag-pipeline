@@ -1,6 +1,11 @@
 name: Search UI
 language: python
-variables: []
+variables:
+  - name: OPENAI_API_KEY
+    inputType: Secret
+    description: To connect to GPT4 for LLM response.
+    defaultValue: openai_apikey
+    required: true
 dockerfile: dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
