@@ -20,9 +20,10 @@ import chainlit as cl
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-apikey = os.environ['OPENAI_API_KEY']
+
+openai_apikey = os.environ['OPENAI_API_KEY']
 os.environ['collectionname'] = "quix-techdocs-no0_5b_1kchars" # "quix-techdocs-no0_5b"
-os.environ['QDRANT_APIKEY'] = "x"
+
 
 collection = os.environ['collectionname']
 embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
