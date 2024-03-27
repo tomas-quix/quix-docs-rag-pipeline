@@ -4,3 +4,4 @@ chainlit
 langchain
 langchain_community
 sentence-transformers
+qdrant-client
