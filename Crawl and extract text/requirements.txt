@@ -1,1 +1,4 @@
-quixstreams==0.5.7
+quixstreams==2.3.3
+langchain
+langchain_community
+bs4
