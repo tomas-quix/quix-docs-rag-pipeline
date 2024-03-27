@@ -12,7 +12,10 @@ import os
 from bs4 import BeautifulSoup, SoupStrainer
 from langchain_community.document_loaders import SitemapLoader
 from quixstreams.kafka import Producer
-
+from quixstreams.models.serializers import (
+    JSONSerializer,
+    SerializationContext,
+)
 
 def save_docs_to_file(docs, file_path):
     with open(file_path, 'wb') as f:
