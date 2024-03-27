@@ -16,6 +16,11 @@ variables:
     description: ''
     defaultValue: 200
     required: false
+  - name: use_local_crawl_pickle
+    inputType: FreeText
+    description: ''
+    defaultValue: False
+    required: false
 dockerfile: dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
