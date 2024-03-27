@@ -1,0 +1,39 @@
+# Quix Project Descriptor
+# This file describes the data pipeline and configuration of resources of a Quix Project.
+
+metadata:
+  version: 1.0
+
+# This section describes the Deployments of the data pipeline
+deployments:
+  - name: Search UI
+    application: Search UI
+    deploymentType: Service
+    version: 684e1f78df13756a944f090582fdec1dedcd1dbf
+    resources:
+      cpu: 500
+      memory: 1000
+      replicas: 1
+    publicAccess:
+      enabled: true
+      urlPrefix: searchui-quix-rag
+    desiredStatus: Running
+    variables:
+      - name: OPENAI_API_KEY
+        inputType: Secret
+        description: To connect to GPT4 for LLM response.
+        required: true
+        secretKey: openai_apikey
+      - name: QDRANT_APIKEY
+        inputType: Secret
+        description: API for connecting to Qdrant
+        required: true
+        secretKey: qdrant_apikey
+      - name: collectionname
+        inputType: FreeText
+        description: ''
+        required: false
+        value: quix-techdocs-no0_5b_1kchars
+
+# This section describes the Topics of the data pipeline
+topics: []
