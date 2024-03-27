@@ -33,6 +33,7 @@ def load_docs_from_file(file_path):
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 outputtopicname = os.environ["output"]
+use_local_bool = os.environ['use_locaL_pickle'] == "True"
 
 textchunksize = os.environ['textchunksize']
 textoverlapsize = os.environ['textoverlapsize']
@@ -73,7 +74,7 @@ def simple_extractor(html: str) -> str:
     return re.sub(r"\n\n+", "\n\n", soup.text).strip()
 
 def ingest_docs(use_local=False, local_path='quix_docs.pickle'):
-    if os.environ["output"]:
+    if use_local:
         # Load the docs from the local pickle file
         docs_from_documentation = load_docs_from_file(local_path)
         logger.info(f"Loaded {len(docs_from_documentation)} docs from local file")
@@ -111,7 +112,7 @@ def ingest_docs(use_local=False, local_path='quix_docs.pickle'):
 
     return docs_transformed
 
-quixdocs = ingest_docs(use_local=True)
+quixdocs = ingest_docs(use_local=use_local_bool)
 
 #### START QUIX STUFF ######
 load_dotenv("./quix_vars.env")
