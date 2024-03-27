@@ -1,2 +1,6 @@
 quixstreams<2.4
 python-dotenv
+chainlit
+langchain
+langchain_community
+sentence-transformers

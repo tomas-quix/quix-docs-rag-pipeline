@@ -1,10 +1,20 @@
 name: Search UI
 language: python
 variables:
-  - name: input
-    inputType: InputTopic
-    description: Name of the input topic to listen to.
-    defaultValue: transform
+  - name: OPENAI_API_KEY
+    inputType: Secret
+    description: To connect to GPT4 for LLM response.
+    defaultValue: openai_apikey
+    required: true
+  - name: QDRANT_APIKEY
+    inputType: Secret
+    description: API for connecting to Qdrant
+    defaultValue: qdrant_apikey
+    required: true
+  - name: collectionname
+    inputType: FreeText
+    description: ''
+    defaultValue: quix-techdocs-no0_5b_1kchars
     required: false
 dockerfile: dockerfile
 runEntryPoint: main.py
