@@ -9,7 +9,7 @@ deployments:
   - name: Search UI
     application: Search UI
     deploymentType: Service
-    version: 684e1f78df13756a944f090582fdec1dedcd1dbf
+    version: 0f7580aa1536677107699b75e16e439cb240cb33
     resources:
       cpu: 500
       memory: 1000
@@ -17,7 +17,7 @@ deployments:
     publicAccess:
       enabled: true
       urlPrefix: searchui-quix-rag
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: OPENAI_API_KEY
         inputType: Secret
