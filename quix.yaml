@@ -9,7 +9,7 @@ deployments:
   - name: Search UI
     application: Search UI
     deploymentType: Service
-    version: 3e8c1beefd9e0d6d74038fcd6b493044591c09ce
+    version: 7a89f9ba6a54ff0274857786f28b1ca093282692
     resources:
       cpu: 500
       memory: 1000
