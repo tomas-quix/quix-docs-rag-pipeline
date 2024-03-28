@@ -5,7 +5,32 @@ metadata:
   version: 1.0
 
 # This section describes the Deployments of the data pipeline
-deployments: []
+deployments:
+  - name: RAG Search UI
+    application: RAG Search UI
+    deploymentType: Service
+    version: bf46a506724e2c2771a06e76b72fbdb48d4fb753
+    resources:
+      cpu: 1000
+      memory: 2000
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: OPENAI_API_KEY
+        inputType: Secret
+        description: To connect to GPT4 for LLM response.
+        required: true
+        secretKey: openai_apikey
+      - name: QDRANT_APIKEY
+        inputType: Secret
+        description: API for connecting to Qdrant
+        required: true
+        secretKey: qdrant_apikey
+      - name: collectionname
+        inputType: FreeText
+        description: ''
+        required: false
+        value: quix-techdocs-no0_5b_1kchars
 
 # This section describes the Topics of the data pipeline
 topics:
