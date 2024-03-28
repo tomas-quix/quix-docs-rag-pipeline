@@ -5,7 +5,35 @@ metadata:
   version: 1.0
 
 # This section describes the Deployments of the data pipeline
-deployments: []
+deployments:
+  - name: Search UI
+    application: Search UI
+    deploymentType: Service
+    version: f7f0c0247a65fb3e03b38afe9a811486208e7065
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    publicAccess:
+      enabled: true
+      urlPrefix: searchui-f7f0c02
+    desiredStatus: Running
+    variables:
+      - name: OPENAI_API_KEY
+        inputType: Secret
+        description: To connect to GPT4 for LLM response.
+        required: true
+        secretKey: openai_apikey
+      - name: QDRANT_APIKEY
+        inputType: Secret
+        description: API for connecting to Qdrant
+        required: true
+        secretKey: qdrant_apikey
+      - name: collectionname
+        inputType: FreeText
+        description: ''
+        required: false
+        value: quix-techdocs-no0_5b_1kchars
 
 # This section describes the Topics of the data pipeline
 topics:
