@@ -33,7 +33,7 @@ deployments:
         inputType: FreeText
         description: ''
         required: false
-        value: quix-techdocs-no0_5b_1kchars
+        value: quix-techdocs-200chunks_1kchars
   - name: Crawl and extract text
     application: Crawl and extract text
     deploymentType: Job
@@ -91,7 +91,7 @@ deployments:
       cpu: 500
       memory: 1000
       replicas: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: input
         inputType: InputTopic
