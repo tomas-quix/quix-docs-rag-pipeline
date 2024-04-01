@@ -1,4 +1,6 @@
-from quixstreams import Application, State, message_key
+from quixstreams import Application
+from quixstreams import State, message_key
+
 import duckdb
 import pandas as pd
 import os
