@@ -34,6 +34,39 @@ deployments:
         description: ''
         required: false
         value: quix-techdocs-no0_5b_1kchars
+  - name: Crawl and extract text
+    application: Crawl and extract text
+    deploymentType: Service
+    version: e58b8e51d47f9dae24243149e650b700f0957bee
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    state:
+      enabled: true
+      size: 1
+    desiredStatus: Running
+    variables:
+      - name: output
+        inputType: OutputTopic
+        description: This is the output topic for hello world data
+        required: true
+        value: raw-text-chunks-test-01-04
+      - name: textchunksize
+        inputType: FreeText
+        description: 200
+        required: false
+        value: 1000
+      - name: textoverlapsize
+        inputType: FreeText
+        description: ''
+        required: false
+        value: 200
+      - name: use_local_crawl_pickle
+        inputType: FreeText
+        description: ''
+        required: false
+        value: False
 
 # This section describes the Topics of the data pipeline
 topics:
