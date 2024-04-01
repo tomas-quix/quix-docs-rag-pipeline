@@ -3,10 +3,7 @@ from sentence_transformers import SentenceTransformer
 from qdrant_client import models, QdrantClient
 import os
 
-os.environ['collectionname'] = 'quix-techdocs-no0_5b_1kchars'
-os.environ['qdrant_apikey'] = "o-V_jw8-4IAyC568JvBAvF74DHvXQ6qLaD5l2GwJaHSVNY6BzFy4Aw"
-os.environ['input'] = 'embeddings-sbert-no0_5_1kchars'
-uselocal = True
+uselocal = False
 
 if uselocal == True:
   qdrant = QdrantClient(path="./qdrant-db")
@@ -18,7 +15,6 @@ else:
       prefer_grpc=True,
       timeout=100
   )
-
 
 encoder = SentenceTransformer('all-MiniLM-L6-v2') # Model to create embeddings
 collection = os.environ['collectionname']
