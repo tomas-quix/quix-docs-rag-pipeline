@@ -122,14 +122,6 @@ app = Application.Quix()
 serializer = JSONSerializer()
 topic = app.topic(name=outputtopicname, value_serializer=serializer)
 
-source_documents_serializable = [
-{
-"page_content": doc.page_content,
-"metadata": doc.metadata
-}
-for doc in source_documents
-]
-
 # load_dotenv("./quix_vars.env")
 print(f"Producing to output topic: {outputtopicname}...\n\n")
 serialize = JSONSerializer()
