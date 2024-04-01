@@ -17,6 +17,7 @@ def sink_duckdb(conn, row, table_name):
     
     # Convert the list of dictionaries to a DataFrame
     df = pd.DataFrame([row])
+    df['Timestamp'] = df['Timestamp'].astype(str)
     
     # Check if the table exists and create it if not
     table_exists = conn.execute(f"SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = '{table_name}')").fetchone()[0]
