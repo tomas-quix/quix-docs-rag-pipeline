@@ -36,8 +36,8 @@ logger = logging.getLogger(__name__)
 outputtopicname = os.environ["output"]
 use_local_bool = os.environ['use_local_crawl_pickle'] == "True"
 
-textchunksize = os.environ['textchunksize']
-textoverlapsize = os.environ['textoverlapsize']
+textchunksize = int(os.environ['textchunksize'])
+textoverlapsize = int(os.environ['textoverlapsize'])
 
 ### USING WEB CRAWLER
 # Inspired by: https://github.com/langchain-ai/chat-langchain/blob/master/ingest.py
