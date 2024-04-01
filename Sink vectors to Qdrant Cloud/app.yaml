@@ -9,7 +9,7 @@ variables:
   - name: collectionname
     inputType: FreeText
     description: ''
-    defaultValue: quix-techdocs-no0_5b_1kchars
+    defaultValue: quix-techdocs-200chunks_1kchars
     required: true
   - name: qdrant_apikey
     inputType: Secret
