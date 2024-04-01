@@ -37,7 +37,6 @@ textoverlapsize = os.environ['textoverlapsize']
 # Inspired by: https://github.com/langchain-ai/chat-langchain/blob/master/ingest.py
 
 def metadata_extractor(meta: dict, soup: BeautifulSoup) -> dict:
-    logger.info(f"SOUP: {soup}") # Logging to see why metadata not extracted properly
     title = soup.find("title")
     description = soup.find("meta", attrs={"name": "description"})
     html = soup.find("html")
@@ -58,9 +57,10 @@ def load_quix_docs():
         parsing_function=quix_docs_extractor,
         default_parser="lxml",
         bs_kwargs={
-            "parse_only": SoupStrainer(
-                name="article", class_=re.compile("md-content__inner")
-            ),
+            # COMMENTING OUT TO GET FULL HTML
+            # "parse_only": SoupStrainer(
+            #    name="article", class_=re.compile("md-content__inner")
+            #),
         },
         meta_function=metadata_extractor,
     ).load()
