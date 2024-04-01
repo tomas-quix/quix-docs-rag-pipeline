@@ -11,17 +11,23 @@ import time
 import os
 from bs4 import BeautifulSoup, SoupStrainer
 from langchain_community.document_loaders import SitemapLoader
-from quixstreams.kafka import Producer
+from quixstreams import Application
 from quixstreams.models.serializers import (
     JSONSerializer,
     SerializationContext,
 )
 
-def save_docs_to_file(docs, file_path):
+def save_docs_to_file(docs, file_dir, file_name):
+    if not os.path.exists(file_dir):
+        os.makedirs(file_dir)
+    file_path= os.path.join(file_dir, file_name)
     with open(file_path, 'wb') as f:
         pickle.dump(docs, f)
 
-def load_docs_from_file(file_path):
+def load_docs_from_file(file_dir, file_name):
+    if not os.path.exists(file_dir):
+        os.makedirs(file_dir)
+    file_path= os.path.join(file_dir,file_name)
     with open(file_path, 'rb') as f:
         return pickle.load(f)
 
@@ -30,14 +36,13 @@ logger = logging.getLogger(__name__)
 outputtopicname = os.environ["output"]
 use_local_bool = os.environ['use_local_crawl_pickle'] == "True"
 
-textchunksize = os.environ['textchunksize']
-textoverlapsize = os.environ['textoverlapsize']
+textchunksize = int(os.environ['textchunksize'])
+textoverlapsize = int(os.environ['textoverlapsize'])
 
 ### USING WEB CRAWLER
 # Inspired by: https://github.com/langchain-ai/chat-langchain/blob/master/ingest.py
 
 def metadata_extractor(meta: dict, soup: BeautifulSoup) -> dict:
-    logger.info(f"SOUP: {soup}") # Logging to see why metadata not extracted properly
     title = soup.find("title")
     description = soup.find("meta", attrs={"name": "description"})
     html = soup.find("html")
@@ -58,9 +63,10 @@ def load_quix_docs():
         parsing_function=quix_docs_extractor,
         default_parser="lxml",
         bs_kwargs={
-            "parse_only": SoupStrainer(
-                name="article", class_=re.compile("md-content__inner")
-            ),
+            # COMMENTING OUT TO GET FULL HTML
+            # "parse_only": SoupStrainer(
+            #    name="article", class_=re.compile("md-content__inner")
+            #),
         },
         meta_function=metadata_extractor,
     ).load()
@@ -69,17 +75,17 @@ def simple_extractor(html: str) -> str:
     soup = BeautifulSoup(html, "lxml")
     return re.sub(r"\n\n+", "\n\n", soup.text).strip()
 
-def ingest_docs(use_local=False, local_path='./state/quix_docs.pickle'):
+def ingest_docs(use_local=False, local_dir="state", local_file='quixdocs.pickle'):
     if use_local:
         # Load the docs from the local pickle file
-        docs_from_documentation = load_docs_from_file(local_path)
+        docs_from_documentation = load_docs_from_file(local_dir, local_file)
         logger.info(f"Loaded {len(docs_from_documentation)} docs from local file")
     else:
         # Crawl the docs and save to the local pickle file
         docs_from_documentation = load_quix_docs()
         logger.info(f"Loaded {len(docs_from_documentation)} docs from documentation")
-        save_docs_to_file(docs_from_documentation, local_path)
-        logger.info(f"Saved docs to {local_path}")
+        save_docs_to_file(docs_from_documentation, local_dir, local_file)
+        logger.info(f"Saved docs to {local_dir}/{local_file}")
     
     #docs_from_documentation = load_quix_docs_local()
     logger.info("Logging first 5 docs..")
@@ -111,14 +117,14 @@ def ingest_docs(use_local=False, local_path='./state/quix_docs.pickle'):
 quixdocs = ingest_docs(use_local=use_local_bool)
 
 #### START QUIX STUFF ######
-load_dotenv("./quix_vars.env")
+app = Application.Quix()
+#app = Application(broker_address='localhost:19092')
+serializer = JSONSerializer()
+topic = app.topic(name=outputtopicname, value_serializer=serializer)
 print(f"Producing to output topic: {outputtopicname}...\n\n")
-serialize = JSONSerializer()
 
 idcounter = 0
-with Producer(
-    extra_config={"allow.auto.create.topics": "true"},
-    ) as producer:
+with app.get_producer() as producer:
     for doc in quixdocs:
         doctext = re.sub(r'\n+', '\n', doc.page_content)
         doctext = re.sub(r' +', ' ', doctext)
