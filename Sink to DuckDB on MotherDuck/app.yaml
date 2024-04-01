@@ -14,7 +14,7 @@ variables:
   - name: tablename
     inputType: FreeText
     description: ''
-    defaultValue: test
+    defaultValue: quix-docs-1kchunks-01-04
     required: false
 dockerfile: dockerfile
 runEntryPoint: main.py
