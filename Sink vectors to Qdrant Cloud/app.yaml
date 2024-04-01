@@ -11,6 +11,11 @@ variables:
     description: ''
     defaultValue: quix-techdocs-no0_5b_1kchars
     required: true
+  - name: qdrant_api_key
+    inputType: Secret
+    description: ''
+    defaultValue: qdrant_apikey
+    required: true
 dockerfile: dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
