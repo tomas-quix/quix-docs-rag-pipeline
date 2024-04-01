@@ -117,8 +117,8 @@ def ingest_docs(use_local=False, local_dir="state", local_file='quixdocs.pickle'
 quixdocs = ingest_docs(use_local=use_local_bool)
 
 #### START QUIX STUFF ######
-#app = Application.Quix()
-app = Application(broker_address='localhost:19092')
+app = Application.Quix()
+#app = Application(broker_address='localhost:19092')
 serializer = JSONSerializer()
 topic = app.topic(name=outputtopicname, value_serializer=serializer)
 
