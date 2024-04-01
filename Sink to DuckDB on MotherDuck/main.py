@@ -44,6 +44,6 @@ sdf = app.dataframe(topic=input_topic)
 sdf = sdf.update(lambda val: print(f"Received update: {val}"))
 
 # Trigger the embedding function for any new messages(rows) detected in the filtered SDF
-sdf = sdf.update(lambda val: sink_duckdb(con, val, os.environ['table']), stateful=False)
+sdf = sdf.update(lambda val: sink_duckdb(con, val, os.environ['tablename']), stateful=False)
 
 app.run(sdf)
