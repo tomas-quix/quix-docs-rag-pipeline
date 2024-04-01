@@ -20,7 +20,7 @@ from quixstreams.models.serializers import (
 def save_docs_to_file(docs, file_dir, file_name):
     if not os.path.exists(file_dir):
         os.makedirs(file_dir)
-    file_path= os.path.join(file_dir,file_name)
+    file_path= os.path.join(file_dir, file_name)
     with open(file_path, 'wb') as f:
         pickle.dump(docs, f)
 
@@ -75,7 +75,7 @@ def simple_extractor(html: str) -> str:
     soup = BeautifulSoup(html, "lxml")
     return re.sub(r"\n\n+", "\n\n", soup.text).strip()
 
-def ingest_docs(use_local=False, local_dir="state", local_file='quix_docs.pickle'):
+def ingest_docs(use_local=False, local_dir="state", local_file='quixdocs.pickle'):
     if use_local:
         # Load the docs from the local pickle file
         docs_from_documentation = load_docs_from_file(local_dir, local_file)
