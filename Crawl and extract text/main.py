@@ -11,7 +11,7 @@ import time
 import os
 from bs4 import BeautifulSoup, SoupStrainer
 from langchain_community.document_loaders import SitemapLoader
-from quixstreams.kafka import Producer
+from quixstreams import Application
 from quixstreams.models.serializers import (
     JSONSerializer,
     SerializationContext,
