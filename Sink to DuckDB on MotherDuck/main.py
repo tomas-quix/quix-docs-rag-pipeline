@@ -1,31 +1,47 @@
-import quixstreams as qx
-import os
+from quixstreams import Application, State, message_key
+import duckdb
 import pandas as pd
+import os
+import time
 
+os.environ['input'] = 'quix-raw-docs-html-no0_5_1kchars'
+os.environ['table'] = 'quix-documents-1kchunks'
 
-client = qx.QuixStreamingClient()
+mdtoken = os.environ['motherduck_token']
+# initiate the MotherDuck connection through a service token through
+con = duckdb.connect(f'md:Docstore?motherduck_token={mdtoken}') 
 
-# get the topic consumer for a specific consumer group
-topic_consumer = client.get_topic_consumer(topic_id_or_name = os.environ["input"],
-                                           consumer_group = "empty-destination")
+# Define the embedding function
+def sink_duckdb(conn, row, table_name):
+    # Ensure row is a list of dictionaries
+    #if isinstance(row, dict):
+    #    row = [row]
+    
+    # Convert the list of dictionaries to a DataFrame
+    df = pd.DataFrame([row])
+    #df = row
+    # Insert the DataFrame into the existing table using the execute method
+    conn.execute(f"INSERT INTO '{table_name}' SELECT * FROM df")
+    
+    # Print a confirmation message
+    print(f"Inserted {len(df)} row into '{table_name}'.")
 
+# Define your application and settings
+app = Application.Quix(
+    consumer_group="duckdb-sink-v2",
+    auto_offset_reset="earliest",
+    consumer_extra_config={"allow.auto.create.topics": "true"},
+    producer_extra_config={"allow.auto.create.topics": "true"},
+)
 
-def on_dataframe_received_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
-    # do something with the data here
-    print(df)
+# Define an input topic with JSON deserializer
+input_topic = app.topic(os.environ['input'], value_deserializer="json")
 
+# Initialize a streaming dataframe based on the stream of messages from the input topic:
+sdf = app.dataframe(topic=input_topic)
+sdf = sdf.update(lambda val: print(f"Received update: {val}"))
 
-def on_stream_received_handler(stream_consumer: qx.StreamConsumer):
-    # subscribe to new DataFrames being received
-    # if you aren't familiar with DataFrames there are other callbacks available
-    # refer to the docs here: https://docs.quix.io/sdk/subscribe.html
-    stream_consumer.timeseries.on_dataframe_received = on_dataframe_received_handler
+# Trigger the embedding function for any new messages(rows) detected in the filtered SDF
+sdf = sdf.update(lambda val: sink_duckdb(con, val, os.environ['table']), stateful=False)
 
-
-# subscribe to new streams being received
-topic_consumer.on_stream_received = on_stream_received_handler
-
-print("Listening to streams. Press CTRL-C to exit.")
-
-# Handle termination signals and provide a graceful exit
-qx.App.run()
+app.run(sdf)
