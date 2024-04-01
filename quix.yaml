@@ -71,7 +71,7 @@ deployments:
       cpu: 500
       memory: 1000
       replicas: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: input
         inputType: InputTopic
@@ -83,6 +83,31 @@ deployments:
         description: Name of the output topic to write to.
         required: false
         value: embeddings-sbert-all-MiniLM-L6-v2
+  - name: Sink vectors to Qdrant Cloud
+    application: Sink vectors to Qdrant Cloud
+    deploymentType: Service
+    version: 4a9151270451d44e5dd95974aa91610353581a57
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: This is the input topic for demo data
+        required: true
+        value: embeddings-sbert-all-MiniLM-L6-v2
+      - name: collectionname
+        inputType: FreeText
+        description: ''
+        required: true
+        value: quix-techdocs-200chunks_1kchars
+      - name: qdrant_apikey
+        inputType: Secret
+        description: ''
+        required: true
+        secretKey: qdrant_apikey
 
 # This section describes the Topics of the data pipeline
 topics:
