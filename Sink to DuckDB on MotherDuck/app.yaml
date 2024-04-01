@@ -11,6 +11,11 @@ variables:
     description: ''
     defaultValue: motherduck_token
     required: false
+  - name: tablename
+    inputType: FreeText
+    description: ''
+    defaultValue: test
+    required: false
 dockerfile: dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
