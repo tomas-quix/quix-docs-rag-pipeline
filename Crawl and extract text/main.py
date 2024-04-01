@@ -117,49 +117,49 @@ def ingest_docs(use_local=False, local_dir="state", local_file='quixdocs.pickle'
 quixdocs = ingest_docs(use_local=use_local_bool)
 
 #### START QUIX STUFF ######
-    app = Application.Quix()
-    # app = Application(broker_address='localhost:19092')
-    serializer = JSONSerializer()
-    topic = app.topic(name=outputtopicname, value_serializer=serializer)
+#app = Application.Quix()
+app = Application(broker_address='localhost:19092')
+serializer = JSONSerializer()
+topic = app.topic(name=outputtopicname, value_serializer=serializer)
 
-    source_documents_serializable = [
-    {
-        "page_content": doc.page_content,
-        "metadata": doc.metadata
-    }
-    for doc in source_documents
-    ]
+source_documents_serializable = [
+{
+"page_content": doc.page_content,
+"metadata": doc.metadata
+}
+for doc in source_documents
+]
 
-    # load_dotenv("./quix_vars.env")
-    print(f"Producing to output topic: {outputtopicname}...\n\n")
-    serialize = JSONSerializer()
-    idcounter = 0
-    with app.get_producer() as producer:
-        idcounter = idcounter + 1
-        doc_id = idcounter
-        doc_key = f"A{'0'*(10-len(str(doc_id)))}{doc_id}"
-        doc_uuid = str(uuid.uuid4())
-        headers = {**serialize.extra_headers, "uuid": doc_uuid}
-        value = {
-            "Timestamp": time.time_ns(),
-            "query": searchquery,
-            "answer": answer,
-            "matching_docs": source_documents_serializable
-            }
+# load_dotenv("./quix_vars.env")
+print(f"Producing to output topic: {outputtopicname}...\n\n")
+serialize = JSONSerializer()
+idcounter = 0
+with app.get_producer() as producer:
+    idcounter = idcounter + 1
+    doc_id = idcounter
+    doc_key = f"A{'0'*(10-len(str(doc_id)))}{doc_id}"
+    doc_uuid = str(uuid.uuid4())
+    headers = {**serialize.extra_headers, "uuid": doc_uuid}
+    value = {
+        "Timestamp": time.time_ns(),
+        "query": searchquery,
+        "answer": answer,
+        "matching_docs": source_documents_serializable
+        }
 
-        print(f"Producing value: {value}...")
-        # with current functionality, we need to manually serialize our data
-        serialized = topic.serialize(
-            key=doc_key,
-            value=value,
-            headers={**serializer.extra_headers, "uuid": str(uuid.uuid4())},
+    print(f"Producing value: {value}...")
+    # with current functionality, we need to manually serialize our data
+    serialized = topic.serialize(
+        key=doc_key,
+        value=value,
+        headers={**serializer.extra_headers, "uuid": str(uuid.uuid4())},
+    )
+
+    producer.produce(
+        topic=topic.name,
+        headers=serialized.headers,
+        key=serialized.key,
+        value=serialized.value,
         )
 
-        producer.produce(
-            topic=topic.name,
-            headers=serialized.headers,
-            key=serialized.key,
-            value=serialized.value,
-            )
-
-    print("ingested quix docs")
+print("ingested quix docs")
