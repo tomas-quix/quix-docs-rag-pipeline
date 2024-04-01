@@ -6,6 +6,16 @@ variables:
     description: This is the input topic for demo data
     defaultValue: embeddings-sbert-all-MiniLM-L6-v2
     required: true
+  - name: collectionname
+    inputType: FreeText
+    description: ''
+    defaultValue: quix-techdocs-200chunks_1kchars
+    required: true
+  - name: qdrant_apikey
+    inputType: Secret
+    description: ''
+    defaultValue: qdrant_apikey
+    required: true
 dockerfile: dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
