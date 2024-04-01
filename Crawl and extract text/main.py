@@ -132,7 +132,6 @@ with app.get_producer() as producer:
         doc_id = idcounter
         doc_key = f"A{'0'*(10-len(str(doc_id)))}{doc_id}"
         doc_uuid = str(uuid.uuid4())
-        headers = {**serialize.extra_headers, "uuid": doc_uuid}
 
         value = {
             "Timestamp": time.time_ns(),
@@ -144,14 +143,19 @@ with app.get_producer() as producer:
         }
 
         print(f"Producing value: {value}")
+        # with current functionality, we need to manually serialize our data
+        serialized = topic.serialize(
+            key=doc_key,
+            value=value,
+            headers={**serializer.extra_headers, "uuid": str(uuid.uuid4())},
+        )
+
         idcounter = idcounter + 1
         producer.produce(
-            topic=outputtopicname,
-            headers=headers,  # a dict is also allowed here
-            key=doc_key,
-            value=serialize(
-                value=value, ctx=SerializationContext(topic=outputtopicname, headers=headers)
-            ),  # needs to be a string
-        )
+            topic=topic.name,
+            headers=serialized.headers,
+            key=serialized.key,
+            value=serialized.value,
+            )
 
 print("ingested quix docs")
