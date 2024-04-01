@@ -19,7 +19,7 @@ from quixstreams.models.serializers import (
 
 def save_docs_to_file(docs, file_path):
     if not os.path.exists(file_path):
-    os.makedirs(file_path)
+        os.makedirs(file_path)
     with open(file_path, 'wb') as f:
         pickle.dump(docs, f)
 
