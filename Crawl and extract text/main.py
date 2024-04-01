@@ -121,10 +121,8 @@ app = Application.Quix()
 #app = Application(broker_address='localhost:19092')
 serializer = JSONSerializer()
 topic = app.topic(name=outputtopicname, value_serializer=serializer)
-
-# load_dotenv("./quix_vars.env")
 print(f"Producing to output topic: {outputtopicname}...\n\n")
-serialize = JSONSerializer()
+
 idcounter = 0
 with app.get_producer() as producer:
     for doc in quixdocs:
