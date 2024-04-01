@@ -17,13 +17,17 @@ from quixstreams.models.serializers import (
     SerializationContext,
 )
 
-def save_docs_to_file(docs, file_path):
-    if not os.path.exists(file_path):
-        os.makedirs(file_path)
+def save_docs_to_file(docs, file_dir, file_name):
+    if not os.path.exists(file_dir):
+        os.makedirs(file_dir)
+    file_path= os.path.join(file_dir,file_name)
     with open(file_path, 'wb') as f:
         pickle.dump(docs, f)
 
-def load_docs_from_file(file_path):
+def load_docs_from_file(file_dir, file_name):
+    if not os.path.exists(file_dir):
+        os.makedirs(file_dir)
+    file_path= os.path.join(file_dir,file_name)
     with open(file_path, 'rb') as f:
         return pickle.load(f)
 
