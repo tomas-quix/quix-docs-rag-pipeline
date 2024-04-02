@@ -16,6 +16,11 @@ variables:
     description: ''
     defaultValue: quix-techdocs-no0_5b_1kchars
     required: false
+  - name: output
+    inputType: OutputTopic
+    description: ''
+    defaultValue: searchqueries
+    required: false
 dockerfile: dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
