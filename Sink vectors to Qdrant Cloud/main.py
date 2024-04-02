@@ -18,7 +18,7 @@ else:
 
 encoder = SentenceTransformer('all-MiniLM-L6-v2') # Model to create embeddings
 collection = os.environ['collectionname']
-createcollection = True
+createcollection = os.environ['createcollection'] == "True"
 count = 0
 
 if createcollection == True:
