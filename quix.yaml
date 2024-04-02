@@ -9,7 +9,7 @@ deployments:
   - name: RAG Search UI
     application: RAG Search UI
     deploymentType: Service
-    version: cfc9f3ffbb94c45e9fcc0269dcdbd0bf6edaa94c
+    version: c1859f70b60189a387fa2462c8bbd64ae767c2e2
     resources:
       cpu: 1000
       memory: 2000
@@ -34,6 +34,11 @@ deployments:
         description: ''
         required: false
         value: quix-techdocs-200chunks_1kchars
+      - name: output
+        inputType: OutputTopic
+        description: ''
+        required: false
+        value: searchqueries
   - name: Crawl and extract text
     application: Crawl and extract text
     deploymentType: Job
