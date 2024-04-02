@@ -1,7 +1,8 @@
 import os
 from typing import List
 import traceback
-
+import uuid
+import time
 from langchain_community.vectorstores import Qdrant
 from langchain.chains import (
     ConversationalRetrievalChain,
@@ -15,6 +16,11 @@ from langchain_community.embeddings.sentence_transformer import (
 )
 
 from qdrant_client import QdrantClient, AsyncQdrantClient
+from quixstreams import Application
+from quixstreams.models.serializers import (
+    JSONSerializer,
+    SerializationContext,
+)
 import logging
 import chainlit as cl
 
@@ -75,11 +81,18 @@ async def on_chat_start():
     cl.user_session.set("chain", chain)
 
 
+searchquery = ""
+answer = ""
+source_documents = []
+text_elements = ""
+
 @cl.on_message
 async def main(message: cl.Message):
     try:
         chain = cl.user_session.get("chain")  # type: ConversationalRetrievalChain
         cb = cl.AsyncLangchainCallbackHandler()
+
+        searchquery = message.content
 
         res = await chain.acall(message.content, callbacks=[cb])
         answer = res["answer"]
@@ -110,3 +123,50 @@ async def main(message: cl.Message):
         logger.error(f"An error occurred: {e}")
         logger.debug(traceback.format_exc())
         # Handle the error appropriately, possibly sending a message to the user
+
+#### START QUIX STUFF ######
+    app = Application.Quix()
+    # app = Application(broker_address='localhost:19092')
+    serializer = JSONSerializer()
+    topic = app.topic(name=outputtopicname, value_serializer=serializer)
+
+    source_documents_serializable = [
+    {
+        "page_content": doc.page_content,
+        "metadata": doc.metadata
+    }
+    for doc in source_documents
+    ]
+
+    # load_dotenv("./quix_vars.env")
+    print(f"Producing to output topic: {outputtopicname}...\n\n")
+    serialize = JSONSerializer()
+    idcounter = 0
+    with app.get_producer() as producer:
+        idcounter = idcounter + 1
+        doc_id = idcounter
+        doc_key = f"A{'0'*(10-len(str(doc_id)))}{doc_id}"
+        doc_uuid = str(uuid.uuid4())
+        value = {
+            "Timestamp": time.time_ns(),
+            "query": searchquery,
+            "answer": answer,
+            "matching_docs": source_documents_serializable
+            }
+
+        print(f"Producing value: {value}...")
+        # with current functionality, we need to manually serialize our data
+        serialized = topic.serialize(
+            key=doc_key,
+            value=value,
+            headers={**serializer.extra_headers, "uuid": doc_uuid},
+        )
+
+        producer.produce(
+            topic=topic.name,
+            headers=serialized.headers,
+            key=serialized.key,
+            value=serialized.value,
+            )
+
+    print("ingested quix docs")
