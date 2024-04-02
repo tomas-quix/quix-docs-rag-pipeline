@@ -91,12 +91,12 @@ deployments:
   - name: Sink vectors to Qdrant Cloud
     application: Sink vectors to Qdrant Cloud
     deploymentType: Service
-    version: 4a9151270451d44e5dd95974aa91610353581a57
+    version: 75bd004bafc5783074946652a3160287f2496320
     resources:
       cpu: 500
       memory: 1000
       replicas: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: input
         inputType: InputTopic
@@ -113,6 +113,11 @@ deployments:
         description: ''
         required: true
         secretKey: qdrant_apikey
+      - name: createcollection
+        inputType: FreeText
+        description: ''
+        required: false
+        value: False
   - name: Sink QUERY to DuckDB on MotherDuck
     application: Sink to DuckDB on MotherDuck
     deploymentType: Service
