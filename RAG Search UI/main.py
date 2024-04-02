@@ -1,32 +1,37 @@
 import os
-from typing import List
 import traceback
+import logging
+import chainlit as cl
+import re
+import uuid
+import time 
 
 from langchain_community.vectorstores import Qdrant
 from langchain.chains import (
     ConversationalRetrievalChain,
 )
-from langchain.chat_models import ChatOpenAI
-
+from langchain_community.chat_models import ChatOpenAI
+from typing import List
 from langchain.docstore.document import Document
 from langchain.memory import ChatMessageHistory, ConversationBufferMemory
 from langchain_community.embeddings.sentence_transformer import (
     SentenceTransformerEmbeddings,
 )
-
 from qdrant_client import QdrantClient, AsyncQdrantClient
-import logging
-import chainlit as cl
+from quixstreams import Application
+from quixstreams.models.serializers import (
+    JSONSerializer,
+    SerializationContext,
+)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 openai_apikey = os.environ['OPENAI_API_KEY']
-#TEST COLLECTIONS: "quix-techdocs-no0_5b_1kchars" # "quix-techdocs-no0_5b"
-
 collection = os.environ['collectionname']
+#TEST COLLECTIONS: "quix-techdocs-no0_5b_1kchars" # "quix-techdocs-no0_5b"
 embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
-
+outputtopicname = os.environ["output"]
 
 @cl.on_chat_start
 async def on_chat_start():
@@ -75,14 +80,25 @@ async def on_chat_start():
 
     cl.user_session.set("chain", chain)
 
+searchquery = ""
+answer = ""
+source_documents = []
+text_elements = ""
 
 @cl.on_message
 async def main(message: cl.Message):
+    global searchquery
+    global answer
+    global source_documents
+    global text_elements
+
     try:
         chain = cl.user_session.get("chain")  # type: ConversationalRetrievalChain
         cb = cl.AsyncLangchainCallbackHandler()
 
-        res = await chain.acall(message.content, callbacks=[cb])
+        searchquery = message.content
+
+        res = await chain.acall(searchquery, callbacks=[cb])
         answer = res["answer"]
         source_documents = res["source_documents"]  # type: List[Document]
 
@@ -111,3 +127,50 @@ async def main(message: cl.Message):
         logger.error(f"An error occurred: {e}")
         logger.debug(traceback.format_exc())
         # Handle the error appropriately, possibly sending a message to the user
+
+    #### START QUIX STUFF ######
+    app = Application.Quix()
+    #app = Application(broker_address='localhost:19092')
+    serializer = JSONSerializer()
+    topic = app.topic(name=outputtopicname, value_serializer=serializer)
+
+    source_documents_serializable = [
+    {
+        "page_content": doc.page_content,
+        "metadata": doc.metadata
+    }
+    for doc in source_documents
+    ]
+
+    # load_dotenv("./quix_vars.env")
+    print(f"Producing to output topic: {outputtopicname}...\n\n")
+    serialize = JSONSerializer()
+    idcounter = 0
+    with app.get_producer() as producer:
+        idcounter = idcounter + 1
+        doc_id = idcounter
+        doc_key = f"A{'0'*(10-len(str(doc_id)))}{doc_id}"
+        doc_uuid = str(uuid.uuid4())
+        value = {
+            "Timestamp": time.time_ns(),
+            "query": searchquery,
+            "answer": answer,
+            "matching_docs": source_documents_serializable
+            }
+
+        print(f"Producing value: {value}...")
+        # with current functionality, we need to manually serialize our data
+        serialized = topic.serialize(
+            key=doc_key,
+            value=value,
+            headers={**serializer.extra_headers, "uuid": doc_uuid},
+        )
+
+        producer.produce(
+            topic=topic.name,
+            headers=serialized.headers,
+            key=serialized.key,
+            value=serialized.value,
+            )
+
+    print("ingested quix docs")
