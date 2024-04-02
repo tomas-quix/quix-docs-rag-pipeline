@@ -9,7 +9,7 @@ deployments:
   - name: RAG Search UI
     application: RAG Search UI
     deploymentType: Service
-    version: c1859f70b60189a387fa2462c8bbd64ae767c2e2
+    version: 6a393f87d0ebb523be6b7276bfddfe02a3374b48
     resources:
       cpu: 1000
       memory: 2000
