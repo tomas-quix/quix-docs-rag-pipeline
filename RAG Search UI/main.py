@@ -1,28 +1,28 @@
 import os
+from typing import List
 import traceback
-import logging
-import chainlit as cl
-import re
 import uuid
-import time 
-
+import time
 from langchain_community.vectorstores import Qdrant
 from langchain.chains import (
     ConversationalRetrievalChain,
 )
-from langchain_community.chat_models import ChatOpenAI
-from typing import List
+from langchain.chat_models import ChatOpenAI
+
 from langchain.docstore.document import Document
 from langchain.memory import ChatMessageHistory, ConversationBufferMemory
 from langchain_community.embeddings.sentence_transformer import (
     SentenceTransformerEmbeddings,
 )
+
 from qdrant_client import QdrantClient, AsyncQdrantClient
 from quixstreams import Application
 from quixstreams.models.serializers import (
     JSONSerializer,
     SerializationContext,
 )
+import logging
+import chainlit as cl
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -80,6 +80,7 @@ async def on_chat_start():
 
     cl.user_session.set("chain", chain)
 
+
 searchquery = ""
 answer = ""
 source_documents = []
@@ -87,18 +88,13 @@ text_elements = ""
 
 @cl.on_message
 async def main(message: cl.Message):
-    global searchquery
-    global answer
-    global source_documents
-    global text_elements
-
     try:
         chain = cl.user_session.get("chain")  # type: ConversationalRetrievalChain
         cb = cl.AsyncLangchainCallbackHandler()
 
         searchquery = message.content
 
-        res = await chain.acall(searchquery, callbacks=[cb])
+        res = await chain.acall(message.content, callbacks=[cb])
         answer = res["answer"]
         source_documents = res["source_documents"]  # type: List[Document]
 
@@ -128,9 +124,9 @@ async def main(message: cl.Message):
         logger.debug(traceback.format_exc())
         # Handle the error appropriately, possibly sending a message to the user
 
-    #### START QUIX STUFF ######
+#### START QUIX STUFF ######
     app = Application.Quix()
-    #app = Application(broker_address='localhost:19092')
+    # app = Application(broker_address='localhost:19092')
     serializer = JSONSerializer()
     topic = app.topic(name=outputtopicname, value_serializer=serializer)
 
