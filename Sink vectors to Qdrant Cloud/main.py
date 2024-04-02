@@ -66,7 +66,7 @@ offsetlimit = 125
 #         app.stop()
 
 app = Application.Quix(
-    consumer_group="qdrant-ingestion-v2",
+    consumer_group="qdrant-ingestion-v3",
     auto_offset_reset="earliest",
     #on_message_processed=on_message_processed,
     consumer_extra_config={"allow.auto.create.topics": "true", "max.poll.interval.ms": 900000 },
