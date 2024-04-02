@@ -1,8 +1,8 @@
 quixstreams<2.4
 python-dotenv
 chainlit
-langchain
-langchain_community
+langchain==0.1.13
+langchain_community==0.0.29
 sentence-transformers
 qdrant-client
 openai
