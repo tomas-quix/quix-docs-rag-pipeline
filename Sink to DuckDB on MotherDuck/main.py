@@ -37,7 +37,7 @@ def sink_duckdb(conn, row, table_name):
 
 # Define your application and settings
 app = Application.Quix(
-    consumer_group="duckdb-sink-v2",
+    consumer_group="duckdb-sink-v3",
     auto_offset_reset="earliest",
     consumer_extra_config={"allow.auto.create.topics": "true"},
     producer_extra_config={"allow.auto.create.topics": "true"},
