@@ -140,7 +140,6 @@ async def main(message: cl.Message):
 
     # load_dotenv("./quix_vars.env")
     print(f"Producing to output topic: {outputtopicname}...\n\n")
-    serialize = JSONSerializer()
     idcounter = 0
     with app.get_producer() as producer:
         idcounter = idcounter + 1
