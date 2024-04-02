@@ -22,11 +22,10 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 openai_apikey = os.environ['OPENAI_API_KEY']
-#TEST COLLECTIONS: "quix-techdocs-no0_5b_1kchars" # "quix-techdocs-no0_5b"
-
 collection = os.environ['collectionname']
+#TEST COLLECTIONS: "quix-techdocs-no0_5b_1kchars" # "quix-techdocs-no0_5b"
 embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
-
+outputtopicname = os.environ["output"]
 
 @cl.on_chat_start
 async def on_chat_start():
