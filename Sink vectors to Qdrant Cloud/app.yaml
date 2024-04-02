@@ -16,6 +16,11 @@ variables:
     description: ''
     defaultValue: qdrant_apikey
     required: true
+  - name: createcollection
+    inputType: FreeText
+    description: ''
+    defaultValue: False
+    required: false
 dockerfile: dockerfile
 runEntryPoint: main.py
 defaultFile: main.py

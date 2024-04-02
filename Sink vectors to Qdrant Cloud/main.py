@@ -18,7 +18,7 @@ else:
 
 encoder = SentenceTransformer('all-MiniLM-L6-v2') # Model to create embeddings
 collection = os.environ['collectionname']
-createcollection = True
+createcollection = os.environ['createcollection'] == "True"
 count = 0
 
 if createcollection == True:
@@ -66,7 +66,7 @@ offsetlimit = 125
 #         app.stop()
 
 app = Application.Quix(
-    consumer_group="qdrant-ingestion-v2",
+    consumer_group="qdrant-ingestion-v3",
     auto_offset_reset="earliest",
     #on_message_processed=on_message_processed,
     consumer_extra_config={"allow.auto.create.topics": "true", "max.poll.interval.ms": 900000 },
