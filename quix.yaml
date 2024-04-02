@@ -113,6 +113,31 @@ deployments:
         description: ''
         required: true
         secretKey: qdrant_apikey
+  - name: Sink QUERY to DuckDB on MotherDuck
+    application: Sink to DuckDB on MotherDuck
+    deploymentType: Service
+    version: e70b87aae0bd12962a0db9236d658bc8bb13f7e6
+    resources:
+      cpu: 500
+      memory: 1000
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: This is the input topic for demo data
+        required: true
+        value: searchqueries
+      - name: motherduck_token
+        inputType: Secret
+        description: ''
+        required: false
+        secretKey: motherduck_token
+      - name: tablename
+        inputType: FreeText
+        description: ''
+        required: false
+        value: quix-searches-1kchunks-02-04-1820
 
 # This section describes the Topics of the data pipeline
 topics:
