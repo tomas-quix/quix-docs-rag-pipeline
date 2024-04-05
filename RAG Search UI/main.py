@@ -178,4 +178,4 @@ async def main(message: cl.Message):
             value=serialized.value,
             )
 
-    print("ingested quix docs")
+    print("ingested search query")
