@@ -9,7 +9,7 @@ deployments:
   - name: RAG Search UI
     application: RAG Search UI
     deploymentType: Service
-    version: 6a393f87d0ebb523be6b7276bfddfe02a3374b48
+    version: latest
     resources:
       cpu: 1000
       memory: 2000
@@ -32,8 +32,8 @@ deployments:
       - name: collectionname
         inputType: FreeText
         description: ''
-        required: false
-        value: quixdocs_C1000_O200_2024-04-05
+        required: true
+        value: quixdocs_C1000_O200_2024-04-05-v2
       - name: output
         inputType: OutputTopic
         description: ''
@@ -47,7 +47,7 @@ deployments:
       cpu: 500
       memory: 1000
       replicas: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: input
         inputType: InputTopic
