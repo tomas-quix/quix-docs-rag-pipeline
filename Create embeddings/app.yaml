@@ -4,7 +4,7 @@ variables:
   - name: input
     inputType: InputTopic
     description: Name of the input topic to listen to.
-    defaultValue: raw-text-chunks-test-01-04
+    defaultValue: raw-text-chunks-2024-04-05-v2
     required: false
   - name: output
     inputType: OutputTopic
