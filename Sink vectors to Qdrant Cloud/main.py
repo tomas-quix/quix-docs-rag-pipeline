@@ -39,6 +39,8 @@ qdrant.get_collection(
 # Define the ingestion function
 def ingest_vectors(row):
   global count
+  print(f"processing message: {row}")
+  
   if len(row['page_content']) < 1:
     print("Detected Empty Page Content")
     row['page_content'] = "No content"
