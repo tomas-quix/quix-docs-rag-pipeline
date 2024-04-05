@@ -14,7 +14,7 @@ variables:
   - name: consumergroup
     inputType: FreeText
     description: ''
-    defaultValue: test
+    defaultValue: embeddings-v2
     required: false
 dockerfile: dockerfile
 runEntryPoint: main.py
