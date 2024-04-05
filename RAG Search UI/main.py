@@ -104,19 +104,29 @@ async def main(message: cl.Message):
         text_elements = []  # type: List[cl.Text]
 
         if source_documents:
-            for source_idx, source_doc in enumerate(source_documents):
-                if source_doc.page_content is None:
-                    logger.error(f"Document at index {source_idx} has None as page_content")
-                source_name = f"source_{source_idx}"
-                text_elements.append(
-                    cl.Text(content=source_doc.page_content, name=source_name)
-                )
-            source_names = [text_el.name for text_el in text_elements]
+            seen_urls = set()  # Set to track seen URLs
+            text_elements = []  # Reset text_elements to ensure it's empty before adding new elements
 
-            if source_names:
-                answer += f"\nSources: {', '.join(source_names)}"
+            for source_idx, source_doc in enumerate(source_documents):
+                source_url = source_doc.metadata.get('url', '#')
+                if source_url not in seen_urls:  # Check if the URL has not been seen before
+                    seen_urls.add(source_url)  # Mark this URL as seen
+
+                    source_title = source_doc.metadata.get('title', f'Source_{source_idx + 1}')
+                    # Remove " - Quix Docs" if it exists in the title
+                    if source_title.endswith(" - Quix Docs"):
+                        source_title = source_title[:-12]
+
+                    markdown_link = f"* [{source_title}]({source_url})\n"  # Bullet point added
+                    text_elements.append(cl.Text(content=markdown_link, name="markdown"))
+
+            # Join with newline for bullet points
+            source_links = ''.join([text_el.content for text_el in text_elements])
+
+            if source_links:
+                answer += f"\n\n**Sources:**\n{source_links}"
             else:
-                answer += "\nNo sources found"
+                answer += "\n\nNo sources found"
 
         await cl.Message(content=answer, elements=text_elements).send()
     except Exception as e:
@@ -124,7 +134,7 @@ async def main(message: cl.Message):
         logger.debug(traceback.format_exc())
         # Handle the error appropriately, possibly sending a message to the user
 
-#### START QUIX STUFF ######
+    #### START QUIX STUFF ######
     app = Application.Quix()
     # app = Application(broker_address='localhost:19092')
     serializer = JSONSerializer()
