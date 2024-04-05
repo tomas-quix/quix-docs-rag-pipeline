@@ -17,7 +17,7 @@ def create_embeddings(row):
 
 # Define your application and settings
 app = Application.Quix(
-    consumer_group="embeddings-v1",
+    consumer_group=os.environ['consumergroup'],
     auto_offset_reset="earliest",
     producer_extra_config={"allow.auto.create.topics": "true"},
 )
