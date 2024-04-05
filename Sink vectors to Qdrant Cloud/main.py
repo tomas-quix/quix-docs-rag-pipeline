@@ -48,7 +48,7 @@ def ingest_vectors(row):
   metadata = row['metadata']
 
   single_record = models.PointStruct(
-    id=metadata['doc_uuid'],
+    id=metadata['uuid'],
     vector=row['embeddings'],
     payload=row
     )
@@ -58,7 +58,7 @@ def ingest_vectors(row):
       points=[single_record]
     )
 
-  print(f'Ingested vector number {count} with entry id: "{metadata["doc_uuid"]}"...')
+  print(f'Ingested vector number {count} with entry id: "{metadata["uuid"]}"...')
   count = count + 1
 
 offsetlimit = 125
