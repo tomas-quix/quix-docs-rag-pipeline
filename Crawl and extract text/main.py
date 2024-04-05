@@ -135,13 +135,18 @@ with app.get_producer() as producer:
         doc_key = f"A{'0'*(10-len(str(doc_id)))}{doc_id}"
         doc_uuid = str(uuid.uuid4())
 
+        docmeta = {
+            "url": doc.metadata['source'], 
+            "title": doc.metadata['title'], 
+            "id":  doc_id,
+            "uuid": doc_uuid
+            }
+
         value = {
             "Timestamp": time.time_ns(),
             "doc_id": doc_id,
-            "doc_uuid": doc_uuid,
-            "doc_title": doc.metadata['title'],
-            "doc_content": doctext,
-            "doc_source": doc.metadata['source'],
+            "metadata": docmeta,
+            "page_content": doctext
         }
 
         print(f"Producing value: {value}")
