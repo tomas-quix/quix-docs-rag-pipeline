@@ -4,7 +4,7 @@ variables:
   - name: input
     inputType: InputTopic
     description: This is the input topic for demo data
-    defaultValue: embeddings-sbert-all-MiniLM-L6-2024-04-05-v2
+    defaultValue: embeddings-sbert-all-MiniLM-L6-v2
     required: true
   - name: collectionname
     inputType: FreeText
