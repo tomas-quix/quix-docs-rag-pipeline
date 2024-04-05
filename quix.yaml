@@ -47,7 +47,7 @@ deployments:
       cpu: 500
       memory: 1000
       replicas: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: input
         inputType: InputTopic
@@ -67,18 +67,18 @@ deployments:
       cpu: 500
       memory: 1000
       replicas: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: input
         inputType: InputTopic
         description: This is the input topic for demo data
         required: true
-        value: embeddings-sbert-all-MiniLM-L6-v2
+        value: embeddings-sbert-all-MiniLM-L6-2024-04-05
       - name: collectionname
         inputType: FreeText
         description: ''
         required: true
-        value: quix-techdocs-200chunks_1kchars
+        value: quixdocs_C1000_O200_2024-04-05
       - name: qdrant_apikey
         inputType: Secret
         description: ''
@@ -88,7 +88,7 @@ deployments:
         inputType: FreeText
         description: ''
         required: false
-        value: False
+        value: True
   - name: Sink QUERY to DuckDB on MotherDuck
     application: Sink to DuckDB on MotherDuck
     deploymentType: Service
