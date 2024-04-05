@@ -123,6 +123,26 @@ deployments:
         description: ''
         required: false
         value: False
+  - name: Create embeddings
+    application: Create embeddings
+    deploymentType: Service
+    version: latest
+    resources:
+      cpu: 1000
+      memory: 2000
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: Name of the input topic to listen to.
+        required: false
+        value: raw-text-chunks-2024-04-05-v2
+      - name: output
+        inputType: OutputTopic
+        description: Name of the output topic to write to.
+        required: false
+        value: embeddings-sbert-all-MiniLM-L6-v2
 
 # This section describes the Topics of the data pipeline
 topics:
