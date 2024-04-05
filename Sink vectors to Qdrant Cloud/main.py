@@ -43,10 +43,10 @@ def ingest_vectors(row):
     print("Detected Empty Page Content")
     row['page_content'] = "No content"
 
-
+  metadata = row['metadata']
 
   single_record = models.PointStruct(
-    id=row['doc_uuid'],
+    id=metadata['doc_uuid'],
     vector=row['embeddings'],
     payload=row
     )
@@ -56,7 +56,7 @@ def ingest_vectors(row):
       points=[single_record]
     )
 
-  print(f'Ingested vector number {count} with entry id: "{row["doc_uuid"]}"...')
+  print(f'Ingested vector number {count} with entry id: "{metadata["doc_uuid"]}"...')
   count = count + 1
 
 offsetlimit = 125
