@@ -11,6 +11,11 @@ variables:
     description: Name of the output topic to write to.
     defaultValue: embeddings-sbert-all-MiniLM-L6-v2
     required: false
+  - name: consumergroup
+    inputType: FreeText
+    description: ''
+    defaultValue: test
+    required: false
 dockerfile: dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
