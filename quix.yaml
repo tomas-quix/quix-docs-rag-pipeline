@@ -96,7 +96,7 @@ deployments:
       cpu: 500
       memory: 1000
       replicas: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: input
         inputType: InputTopic
@@ -175,6 +175,13 @@ topics:
       retentionInMinutes: 1440
       retentionInBytes: 52428800
   - name: searchqueries
+    persisted: false
+    configuration:
+      partitions: 1
+      replicationFactor: 2
+      retentionInMinutes: 1440
+      retentionInBytes: 52428800
+  - name: raw-text-chunks-2024-04-05
     persisted: false
     configuration:
       partitions: 1
