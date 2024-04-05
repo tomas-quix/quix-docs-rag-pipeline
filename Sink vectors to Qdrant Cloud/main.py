@@ -39,11 +39,11 @@ qdrant.get_collection(
 # Define the ingestion function
 def ingest_vectors(row):
   global count
-  if len(row['doc_content']) < 1:
+  if len(row['page_content']) < 1:
     print("Detected Empty Page Content")
-    row['doc_content'] = "No content"
+    row['page_content'] = "No content"
 
-  row['page_content'] = row.pop('doc_content')
+
 
   single_record = models.PointStruct(
     id=row['doc_uuid'],
