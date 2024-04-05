@@ -42,7 +42,7 @@ deployments:
   - name: Create embeddings
     application: Create embeddings
     deploymentType: Service
-    version: 7cf1c28c86616ce1c45c0c6834c57877c6321537
+    version: latest
     resources:
       cpu: 500
       memory: 1000
@@ -53,12 +53,12 @@ deployments:
         inputType: InputTopic
         description: Name of the input topic to listen to.
         required: false
-        value: raw-text-chunks-2024-04-05
+        value: raw-text-chunks-2024-04-05-v2
       - name: output
         inputType: OutputTopic
         description: Name of the output topic to write to.
         required: false
-        value: embeddings-sbert-all-MiniLM-L6-2024-04-05
+        value: embeddings-sbert-all-MiniLM-L6-2024-04-05-v2
   - name: Sink vectors to Qdrant Cloud
     application: Sink vectors to Qdrant Cloud
     deploymentType: Service
