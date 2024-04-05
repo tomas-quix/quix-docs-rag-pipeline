@@ -131,7 +131,7 @@ deployments:
       cpu: 1000
       memory: 2000
       replicas: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: input
         inputType: InputTopic
@@ -142,7 +142,7 @@ deployments:
         inputType: OutputTopic
         description: Name of the output topic to write to.
         required: false
-        value: embeddings-sbert-all-MiniLM-L6-v2
+        value: embeddings-sbert-all-MiniLM-L6-2024-04-05-v2
 
 # This section describes the Topics of the data pipeline
 topics:
