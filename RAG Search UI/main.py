@@ -36,7 +36,7 @@ outputtopicname = os.environ["output"]
 @cl.on_chat_start
 async def on_chat_start():
     client = QdrantClient(
-                    url="https://620342be-1e5e-401c-98da-42bcaddaed57.us-east4-0.gcp.cloud.qdrant.io:6333",
+                    url="https://20670375-f669-4a3f-a67e-dd533679b26d.us-east4-0.gcp.cloud.qdrant.io:6333",
                     api_key=os.environ['QDRANT_APIKEY'],
                     timeout=100,
                     grpc_port=6334,
@@ -45,7 +45,7 @@ async def on_chat_start():
     # client = QdrantClient(path="./qdrant-db-buffer")
     
     aclient = AsyncQdrantClient(
-                    url="https://620342be-1e5e-401c-98da-42bcaddaed57.us-east4-0.gcp.cloud.qdrant.io:6333",
+                    url="https://20670375-f669-4a3f-a67e-dd533679b26d.us-east4-0.gcp.cloud.qdrant.io:6333",
                     api_key=os.environ['QDRANT_APIKEY'],
                     timeout=100,
                     grpc_port=6334,
