@@ -9,7 +9,7 @@ if uselocal == True:
   qdrant = QdrantClient(path="./qdrant-db")
 else:
   qdrant = QdrantClient(
-      url="https://620342be-1e5e-401c-98da-42bcaddaed57.us-east4-0.gcp.cloud.qdrant.io:6333",
+      url="https://20670375-f669-4a3f-a67e-dd533679b26d.us-east4-0.gcp.cloud.qdrant.io:6333",
       api_key=os.environ['qdrant_apikey'],
       grpc_port=6334,
       prefer_grpc=True,
