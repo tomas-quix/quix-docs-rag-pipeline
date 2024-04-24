@@ -47,7 +47,7 @@ deployments:
       cpu: 500
       memory: 1000
       replicas: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: input
         inputType: InputTopic
@@ -68,7 +68,7 @@ deployments:
         inputType: FreeText
         description: ''
         required: false
-        value: False
+        value: True
   - name: Sink QUERY to DuckDB on MotherDuck
     application: Sink to DuckDB on MotherDuck
     deploymentType: Service
