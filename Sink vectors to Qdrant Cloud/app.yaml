@@ -19,7 +19,7 @@ variables:
   - name: createcollection
     inputType: FreeText
     description: ''
-    defaultValue: False
+    defaultValue: True
     required: false
 dockerfile: dockerfile
 runEntryPoint: main.py
