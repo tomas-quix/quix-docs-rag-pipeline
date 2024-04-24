@@ -20,7 +20,7 @@ encoder = SentenceTransformer('all-MiniLM-L6-v2') # Model to create embeddings
 collection = os.environ['collectionname']
 createcollection = os.environ['createcollection'] == "True"
 count = 0
-
+print(createcollection)
 if createcollection == True:
   # Create collection to store items
   qdrant.recreate_collection(
