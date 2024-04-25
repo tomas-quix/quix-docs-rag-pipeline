@@ -4,7 +4,7 @@ from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 
 app = Flask(__name__)
-client = WebClient(token=os.environ['SLACK_BOT_TOKEN'])
+client = WebClient(token=os.environ['slack_token'])
 
 @app.route('/slack/events', methods=['POST'])
 def slack_events():
