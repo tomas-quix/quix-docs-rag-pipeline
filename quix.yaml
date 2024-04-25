@@ -194,6 +194,11 @@ deployments:
         description: Name of the output topic to write to.
         required: false
         value: slack-enriched
+      - name: slack_token
+        inputType: Secret
+        description: ''
+        required: true
+        secretKey: slack_token
 
 # This section describes the Topics of the data pipeline
 topics:
