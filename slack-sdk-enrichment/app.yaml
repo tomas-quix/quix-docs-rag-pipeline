@@ -11,6 +11,11 @@ variables:
     description: Name of the output topic to write to.
     defaultValue: slack-enriched
     required: false
+  - name: slack_token
+    inputType: Secret
+    description: ''
+    defaultValue: slack_token
+    required: true
 dockerfile: dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
