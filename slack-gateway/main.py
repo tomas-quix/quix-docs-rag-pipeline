@@ -1,45 +1,49 @@
+from flask import Flask, request, jsonify
 import os
-import datetime
-import json
-
-from flask import Flask, request, Response
-from waitress import serve
-
-from setup_logging import get_logger
-
-from quixstreams.platforms.quix import QuixKafkaConfigsBuilder
-from quixstreams.kafka import Producer
-
-# for local dev, load env vars from a .env file
-from dotenv import load_dotenv
-load_dotenv()
-
-cfg_builder = QuixKafkaConfigsBuilder()
-cfgs, topics, _ = cfg_builder.get_confluent_client_configs([os.environ["output"]])
-producer = Producer(cfgs.pop("bootstrap.servers"), extra_config=cfgs)
-
-
-logger = get_logger()
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
 
 app = Flask(__name__)
+client = WebClient(token=os.environ['SLACK_BOT_TOKEN'])
 
+@app.route('/slack/events', methods=['POST'])
+def slack_events():
+    json_data = request.json
+    # Check for Slack's challenge response
+    if "challenge" in json_data:
+        return jsonify({'challenge': json_data['challenge']})
 
-@app.route("/data/", methods=['POST'])
-def post_data():
-    
-    data = request.json
+    # Extract the event data
+    event_message = json_data['event']
 
-    print(data)
+    # Check for different types of message events
+    try:
+        if event_message['type'] == 'message' and 'subtype' not in event_message:
+            handle_message(event_message)
+        elif event_message['type'] == 'message' and event_message['subtype'] == 'message_replied':
+            handle_thread_message(event_message)
+    except KeyError as e:
+        print(f"Key error: {str(e)}")
+        return jsonify({'status': 'error', 'error': str(e)}), 200
 
-    logger.info(f"{str(datetime.datetime.utcnow())} posted.")
-    
-    producer.produce(topics[0], json.dumps(data), data["sessionId"])
+    return jsonify({'status': 'ok'}), 200
 
-    response = Response(status=200)
-    response.headers.add('Access-Control-Allow-Origin', '*')
+def handle_message(message):
+    channel_id = message['channel']
+    message_text = message['text']
+    print(f"Regular message received: {message_text}")
+    # Add custom processing logic here
 
-    return response
+def handle_thread_message(message):
+    channel_id = message['channel']
+    thread_ts = message['thread_ts']
+    parent_message_text = message.get('parent_user_id', {}).get('text', 'N/A')
+    reply_count = message.get('reply_count', 0)
+    replies = message.get('replies', [])
+    print(f"Thread message received in {channel_id}, thread timestamp {thread_ts}, replies count {reply_count}")
+    for reply in replies:
+        print(f"Reply from {reply['user']} with text: {reply['text']}")
+    # Add custom processing logic here
 
-
-if __name__ == '__main__':
-    serve(app, host="0.0.0.0", port=80)
+if __name__ == "__main__":
+    app.run(port=80)
