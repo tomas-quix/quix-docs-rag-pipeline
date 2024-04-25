@@ -36,9 +36,9 @@ def slack_events():
     if "challenge" in json_data:
         return jsonify({'challenge': json_data['challenge']})
 
-    channel_id = message['event']['channel']
+    channel_id = json_data['event']['channel']
 
-    producer.produce(topics[0], json.dumps(data), channel_id)
+    producer.produce(topics[0], json.dumps(json_data), channel_id)
 
     return jsonify({'status': 'ok'}), 200
 
