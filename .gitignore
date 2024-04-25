@@ -1,0 +1,8 @@
+
+venv/
+
+slack-sdk-enrichment/state/
+
+slack-sdk-enrichment/certificates/
+
+slack-sdk-enrichment/.env
