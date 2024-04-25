@@ -6,6 +6,11 @@ from slack_sdk.errors import SlackApiError
 app = Flask(__name__)
 client = WebClient(token=os.environ['slack_token'])
 
+@app.route('/hello', methods=['GET'])
+def hello():
+    return jsonify({'status': 'ok'}), 200
+
+
 @app.route('/slack/events', methods=['POST'])
 def slack_events():
     json_data = request.json
@@ -47,4 +52,4 @@ def handle_thread_message(message):
     # Add custom processing logic here
 
 if __name__ == "__main__":
-    app.run(port=80)
+    app.run( port=80)
