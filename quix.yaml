@@ -77,7 +77,7 @@ deployments:
       cpu: 500
       memory: 1000
       replicas: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: input
         inputType: InputTopic
@@ -148,6 +148,29 @@ deployments:
         description: ''
         required: false
         value: embeddings-v2
+  - name: Slack Gateway
+    application: slack-gateway
+    deploymentType: Service
+    version: latest
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    publicAccess:
+      enabled: true
+      urlPrefix: slack-gateway
+    desiredStatus: Running
+    variables:
+      - name: output
+        inputType: OutputTopic
+        description: This is the output topic for hello world data
+        required: true
+        value: hello-world-source
+      - name: slack_token
+        inputType: Secret
+        description: ''
+        required: false
+        secretKey: slack_token
 
 # This section describes the Topics of the data pipeline
 topics:
