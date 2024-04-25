@@ -9,6 +9,7 @@ client = WebClient(token=os.environ['slack_token'])
 @app.route('/slack/events', methods=['POST'])
 def slack_events():
     json_data = request.json
+    print(json_data)
     # Check for Slack's challenge response
     if "challenge" in json_data:
         return jsonify({'challenge': json_data['challenge']})
