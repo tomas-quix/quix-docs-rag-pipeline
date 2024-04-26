@@ -47,7 +47,7 @@ deployments:
       cpu: 500
       memory: 1000
       replicas: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: input
         inputType: InputTopic
@@ -182,7 +182,7 @@ deployments:
     state:
       enabled: true
       size: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: input
         inputType: InputTopic
@@ -194,6 +194,11 @@ deployments:
         description: Name of the output topic to write to.
         required: false
         value: slack-enriched
+      - name: slack_token
+        inputType: Secret
+        description: ''
+        required: true
+        secretKey: slack_token
 
 # This section describes the Topics of the data pipeline
 topics:
@@ -281,3 +286,31 @@ topics:
       replicationFactor: 2
       retentionInMinutes: -1
       retentionInBytes: 524288000
+  - name: slack-grouped-by-thread
+    persisted: false
+    configuration:
+      partitions: 2
+      replicationFactor: 2
+      retentionInMinutes: -1
+      retentionInBytes: 524288000
+  - name: slack-aggregated-by-thread
+    persisted: false
+    configuration:
+      partitions: 1
+      replicationFactor: 2
+      retentionInMinutes: 1440
+      retentionInBytes: 52428800
+  - name: slack-sdk-threads
+    persisted: false
+    configuration:
+      partitions: 1
+      replicationFactor: 2
+      retentionInMinutes: 1440
+      retentionInBytes: 52428800
+  - name: embeddings
+    persisted: false
+    configuration:
+      partitions: 1
+      replicationFactor: 2
+      retentionInMinutes: 1440
+      retentionInBytes: 52428800
