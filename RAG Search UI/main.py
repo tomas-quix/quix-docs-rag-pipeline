@@ -94,7 +94,7 @@ async def main(message: cl.Message):
 
         searchquery = message.content
 
-        res = await chain.acall(message.content, callbacks=[cb])
+        res = await chain.acall(message.content, callbacks=[cb]) # Call to lchain 
         answer = res["answer"]
         source_documents = res["source_documents"]  # type: List[Document]
 
@@ -103,30 +103,30 @@ async def main(message: cl.Message):
 
         text_elements = []  # type: List[cl.Text]
 
-        if source_documents:
-            seen_urls = set()  # Set to track seen URLs
-            text_elements = []  # Reset text_elements to ensure it's empty before adding new elements
+        # if source_documents:
+        #     seen_urls = set()  # Set to track seen URLs
+        #     text_elements = []  # Reset text_elements to ensure it's empty before adding new elements
 
-            for source_idx, source_doc in enumerate(source_documents):
-                source_url = source_doc.metadata.get('url', '#')
-                if source_url not in seen_urls:  # Check if the URL has not been seen before
-                    seen_urls.add(source_url)  # Mark this URL as seen
+        #     for source_idx, source_doc in enumerate(source_documents):
+        #         source_url = source_doc.metadata.get('url', '#')
+        #         if source_url not in seen_urls:  # Check if the URL has not been seen before
+        #             seen_urls.add(source_url)  # Mark this URL as seen
 
-                    source_title = source_doc.metadata.get('title', f'Source_{source_idx + 1}')
-                    # Remove " - Quix Docs" if it exists in the title
-                    if source_title.endswith(" - Quix Docs"):
-                        source_title = source_title[:-12]
+        #             source_title = source_doc.metadata.get('title', f'Source_{source_idx + 1}')
+        #             # Remove " - Quix Docs" if it exists in the title
+        #             if source_title.endswith(" - Quix Docs"):
+        #                 source_title = source_title[:-12]
 
-                    markdown_link = f"* [{source_title}]({source_url})\n"  # Bullet point added
-                    text_elements.append(cl.Text(content=markdown_link, name="markdown"))
+        #             markdown_link = f"* [{source_title}]({source_url})\n"  # Bullet point added
+        #             text_elements.append(cl.Text(content=markdown_link, name="markdown"))
 
-            # Join with newline for bullet points
-            source_links = ''.join([text_el.content for text_el in text_elements])
+        #     # Join with newline for bullet points
+        #     source_links = ''.join([text_el.content for text_el in text_elements])
 
-            if source_links:
-                answer += f"\n\n**Sources:**\n{source_links}"
-            else:
-                answer += "\n\nNo sources found"
+            # if source_links:
+            #     answer += f"\n\n**Sources:**\n{source_links}"
+            # else:
+            #     answer += "\n\nNo sources found"
 
         await cl.Message(content=answer, elements=text_elements).send()
     except Exception as e:
