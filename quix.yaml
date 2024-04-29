@@ -326,6 +326,11 @@ deployments:
         description: ''
         required: false
         value: True
+      - name: vector_size
+        inputType: FreeText
+        description: ''
+        required: false
+        value: 384
 
 # This section describes the Topics of the data pipeline
 topics:
