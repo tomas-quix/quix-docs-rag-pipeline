@@ -414,3 +414,10 @@ topics:
       replicationFactor: 2
       retentionInMinutes: -1
       retentionInBytes: 524288000
+  - name: slack-internal-raw-history
+    persisted: false
+    configuration:
+      partitions: 4
+      replicationFactor: 2
+      retentionInMinutes: 60
+      retentionInBytes: 524288000
