@@ -264,6 +264,20 @@ deployments:
         description: ''
         required: true
         secretKey: slack_token
+  - name: Slack internal batch load
+    application: slack-history-batch-load
+    deploymentType: Job
+    version: latest
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    variables:
+      - name: output
+        inputType: OutputTopic
+        description: Name of the output topic to write into
+        required: true
+        value: slack-raw-history
 
 # This section describes the Topics of the data pipeline
 topics:
