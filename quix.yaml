@@ -277,7 +277,7 @@ deployments:
         inputType: OutputTopic
         description: Name of the output topic to write into
         required: true
-        value: slack-raw-history
+        value: slack-internal-raw-history
   - name: Slack history preprocessing (internal)
     application: slack-history-preprocessing
     deploymentType: Service
