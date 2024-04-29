@@ -286,13 +286,6 @@ topics:
       replicationFactor: 2
       retentionInMinutes: -1
       retentionInBytes: 524288000
-  - name: slack-grouped-by-thread
-    persisted: false
-    configuration:
-      partitions: 2
-      replicationFactor: 2
-      retentionInMinutes: -1
-      retentionInBytes: 524288000
   - name: slack-sdk-threads
     persisted: false
     configuration:
