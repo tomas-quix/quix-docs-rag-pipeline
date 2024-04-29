@@ -18,7 +18,7 @@ qdrant = QdrantClient(
 )
 
 collection = os.environ['collectionname']
-createcollection = os.environ['createcollection'] == "True"
+createcollection = os.environ['createcollection'] == "true"
 
 print(createcollection)
 
