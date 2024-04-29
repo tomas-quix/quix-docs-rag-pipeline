@@ -41,7 +41,7 @@ qdrant.get_collection(
 def ingest_vectors(row):
 
   single_record = models.PointStruct(
-    id=row['doc_id'],
+    id=str(uuid.uuid4()),
     vector=row['embeddings'],
     payload=row
     )
