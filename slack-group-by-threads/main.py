@@ -25,6 +25,14 @@ sdf = sdf[sdf.contains('event')]
 sdf = sdf.apply(lambda row: row['event'])
 sdf = sdf[sdf.contains("user")]
 
+sdf = sdf.apply(lambda row: {
+  "text": row['text'],
+  "channel": row['channel'],
+  "user": row['user'],
+  "thread_ts": float(row["thread_ts"]) if "thread_ts" in row else None,
+  "event_ts": float(row['event_ts'])
+})
+
 sdf = sdf.update(print)
 
 sdf = sdf.to_topic(output_topic, key=get_thread_key)
