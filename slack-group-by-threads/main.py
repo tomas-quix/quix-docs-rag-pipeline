@@ -21,7 +21,7 @@ def get_thread_key(row: dict):
 
 sdf = app.dataframe(input_topic)
 
-
+sdf = sdf[sdf.contains('event')]
 sdf = sdf.apply(lambda row: row['event'])
 sdf = sdf[sdf.contains("user")]
 
