@@ -52,6 +52,8 @@ sdf = app.dataframe(topic=input_topic)
 
 sdf = sdf.update(lambda val: print(f"Received update: {val}"))
 
+sdf = sdf[sdf.contains("event_ts")]
+
 # Trigger the embedding function for any new messages(rows) detected in the filtered SDF
 sdf = sdf.apply(create_embeddings)
 
