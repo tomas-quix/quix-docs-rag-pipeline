@@ -17,7 +17,7 @@ deployments:
     publicAccess:
       enabled: true
       urlPrefix: ragsearchui-docs
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: OPENAI_API_KEY
         inputType: Secret
@@ -286,20 +286,6 @@ topics:
       replicationFactor: 2
       retentionInMinutes: -1
       retentionInBytes: 524288000
-  - name: slack-grouped-by-thread
-    persisted: false
-    configuration:
-      partitions: 2
-      replicationFactor: 2
-      retentionInMinutes: -1
-      retentionInBytes: 524288000
-  - name: slack-aggregated-by-thread
-    persisted: false
-    configuration:
-      partitions: 1
-      replicationFactor: 2
-      retentionInMinutes: 1440
-      retentionInBytes: 52428800
   - name: slack-sdk-threads
     persisted: false
     configuration:
@@ -308,6 +294,34 @@ topics:
       retentionInMinutes: 1440
       retentionInBytes: 52428800
   - name: embeddings
+    persisted: false
+    configuration:
+      partitions: 1
+      replicationFactor: 2
+      retentionInMinutes: 1440
+      retentionInBytes: 52428800
+  - name: slack-raw-history
+    persisted: false
+    configuration:
+      partitions: 1
+      replicationFactor: 2
+      retentionInMinutes: -1
+      retentionInBytes: 524288000
+  - name: csv-data
+    persisted: false
+    configuration:
+      partitions: 1
+      replicationFactor: 2
+      retentionInMinutes: 1440
+      retentionInBytes: 52428800
+  - name: slack-grouped-by-thread
+    persisted: false
+    configuration:
+      partitions: 1
+      replicationFactor: 2
+      retentionInMinutes: 1440
+      retentionInBytes: 52428800
+  - name: slack-aggregated-by-thread
     persisted: false
     configuration:
       partitions: 1
