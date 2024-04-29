@@ -39,36 +39,6 @@ deployments:
         description: ''
         required: false
         value: searchqueries
-  - name: Sink vectors to Qdrant Cloud
-    application: Sink vectors to Qdrant Cloud
-    deploymentType: Service
-    version: latest
-    resources:
-      cpu: 500
-      memory: 1000
-      replicas: 1
-    desiredStatus: Stopped
-    variables:
-      - name: input
-        inputType: InputTopic
-        description: This is the input topic for demo data
-        required: true
-        value: embeddings-sbert-all-MiniLM-L6-2024-04-05-v2
-      - name: collectionname
-        inputType: FreeText
-        description: ''
-        required: true
-        value: quixdocs_C1000_O200_2024-04-05-v2
-      - name: qdrant_apikey
-        inputType: Secret
-        description: ''
-        required: true
-        secretKey: qdrant_apikey
-      - name: createcollection
-        inputType: FreeText
-        description: ''
-        required: false
-        value: True
   - name: Sink QUERY to DuckDB on MotherDuck
     application: Sink to DuckDB on MotherDuck
     deploymentType: Service
