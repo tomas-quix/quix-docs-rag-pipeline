@@ -29,7 +29,7 @@ sdf = sdf.apply(lambda row: {
   "text": row['text'],
   "channel": row['channel'],
   "user": row['user'],
-  "thread_ts": float(row["thread_ts"] if "thread_ts" in row else row["thread_ts"]),
+  "thread_ts": float(row["thread_ts"] if "thread_ts" in row else row["event_ts"]),
   "event_ts": float(row['event_ts'])
 })
 
