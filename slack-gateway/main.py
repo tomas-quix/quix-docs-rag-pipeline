@@ -40,7 +40,7 @@ def slack_events():
 
     channel_id = json_data['event']['channel']
 
-    producer.produce(topics[0], json.dumps(json_data), channel_id)
+    producer.produce(topic.name, json.dumps(json_data), channel_id)
 
     return jsonify({'status': 'ok'}), 200
 
