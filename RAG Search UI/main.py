@@ -96,10 +96,10 @@ async def main(message: cl.Message):
 
         res = await chain.acall(message.content, callbacks=[cb]) # Call to lchain 
         answer = res["answer"]
-        source_documents = res["source_documents"]  # type: List[Document]
+        #source_documents = res["source_documents"]  # type: List[Document]
 
         # Log the source documents to see if any have None as page_content
-        logger.info(f"Source documents: {source_documents}")
+        #logger.info(f"Source documents: {source_documents}")
 
         text_elements = []  # type: List[cl.Text]
 
@@ -135,47 +135,47 @@ async def main(message: cl.Message):
         # Handle the error appropriately, possibly sending a message to the user
 
     #### START QUIX STUFF ######
-    app = Application.Quix()
-    # app = Application(broker_address='localhost:19092')
-    serializer = JSONSerializer()
-    topic = app.topic(name=outputtopicname, value_serializer=serializer)
+    # app = Application.Quix()
+    # # app = Application(broker_address='localhost:19092')
+    # serializer = JSONSerializer()
+    # topic = app.topic(name=outputtopicname, value_serializer=serializer)
 
-    source_documents_serializable = [
-    {
-        "page_content": doc.page_content,
-        "metadata": doc.metadata
-    }
-    for doc in source_documents
-    ]
+    # source_documents_serializable = [
+    # {
+    #     "page_content": doc.page_content,
+    #     "metadata": doc.metadata
+    # }
+    # for doc in source_documents
+    # ]
 
-    # load_dotenv("./quix_vars.env")
-    print(f"Producing to output topic: {outputtopicname}...\n\n")
-    idcounter = 0
-    with app.get_producer() as producer:
-        idcounter = idcounter + 1
-        doc_id = idcounter
-        doc_key = f"A{'0'*(10-len(str(doc_id)))}{doc_id}"
-        doc_uuid = str(uuid.uuid4())
-        value = {
-            "Timestamp": time.time_ns(),
-            "query": searchquery,
-            "answer": answer,
-            "matching_docs": source_documents_serializable
-            }
+    # # load_dotenv("./quix_vars.env")
+    # print(f"Producing to output topic: {outputtopicname}...\n\n")
+    # idcounter = 0
+    # with app.get_producer() as producer:
+    #     idcounter = idcounter + 1
+    #     doc_id = idcounter
+    #     doc_key = f"A{'0'*(10-len(str(doc_id)))}{doc_id}"
+    #     doc_uuid = str(uuid.uuid4())
+    #     value = {
+    #         "Timestamp": time.time_ns(),
+    #         "query": searchquery,
+    #         "answer": answer,
+    #         "matching_docs": source_documents_serializable
+    #         }
 
-        print(f"Producing value: {value}...")
-        # with current functionality, we need to manually serialize our data
-        serialized = topic.serialize(
-            key=doc_key,
-            value=value,
-            headers={**serializer.extra_headers, "uuid": doc_uuid},
-        )
+    #     print(f"Producing value: {value}...")
+    #     # with current functionality, we need to manually serialize our data
+    #     serialized = topic.serialize(
+    #         key=doc_key,
+    #         value=value,
+    #         headers={**serializer.extra_headers, "uuid": doc_uuid},
+    #     )
 
-        producer.produce(
-            topic=topic.name,
-            headers=serialized.headers,
-            key=serialized.key,
-            value=serialized.value,
-            )
+    #     producer.produce(
+    #         topic=topic.name,
+    #         headers=serialized.headers,
+    #         key=serialized.key,
+    #         value=serialized.value,
+    #         )
 
     print("ingested search query")

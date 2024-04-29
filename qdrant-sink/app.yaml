@@ -1,0 +1,26 @@
+name: qdrant-sink
+language: Python
+variables:
+  - name: input
+    inputType: InputTopic
+    description: This is the input topic for demo data
+    defaultValue: embeddings
+    required: true
+  - name: collectionname
+    inputType: FreeText
+    description: ''
+    defaultValue: quixdocs_C1000_O200_2024-04-05-v2
+    required: true
+  - name: qdrant_apikey
+    inputType: Secret
+    description: ''
+    defaultValue: qdrant_apikey
+    required: true
+  - name: createcollection
+    inputType: FreeText
+    description: ''
+    defaultValue: True
+    required: false
+dockerfile: dockerfile
+runEntryPoint: main.py
+defaultFile: main.py

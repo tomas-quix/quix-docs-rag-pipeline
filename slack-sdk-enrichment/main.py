@@ -13,12 +13,14 @@ load_dotenv()
 client = WebClient(token=os.environ["slack_token"])
 
 
-app = Application.Quix("slack-enrich-v1", auto_offset_reset="earliest", use_changelog_topics=True)
+app = Application.Quix("slack-enrich-v2.4", auto_offset_reset="latest", use_changelog_topics=False)
 
 input_topic = app.topic(os.environ["input"])
 output_topic = app.topic(os.environ["output"])
 
-def lookup_user(user_id:str, state: State):
+def lookup_users(row:dict, state: State):
+    
+    user_id = row["user"]
     
     if user_id is None:
         return None
@@ -29,10 +31,17 @@ def lookup_user(user_id:str, state: State):
         print("Getting info about user: " + user_id)
         user_dto = client.users_info(user=user_id)
         print(user_dto)
-        user = user_dto["user"]["real_name"]
+        if 'real_name' in user_dto["user"]:
+            user = user_dto["user"]["real_name"]
+        else:
+            user = user_dto["user"]['profile']["real_name"]
+        row['user'] = user
         state.set(user_id, user)
         
-    return user
+    if 'replies' in row:
+        for reply in row['replies']:
+            lookup_users(reply, state)
+        
         
 def lookup_channel(row:dict, state: State):
     channel_id = row["channel"]
@@ -52,29 +61,15 @@ def lookup_channel(row:dict, state: State):
 
 
 sdf = app.dataframe(input_topic)
-    
-    
-sdf = sdf.apply(lambda row: row["event"])
-sdf = sdf[sdf.contains("text") & sdf["text"].notnull()]
 
-sdf = sdf[(sdf['type'] == 'message') & (sdf.contains("user"))]
-
+sdf = sdf[sdf.contains('channel')]
     
-
 sdf["channel"] = sdf.apply(lookup_channel, stateful=True)
-sdf["parent_user"] = sdf.apply(lambda row,state: lookup_user(row.get("parent_user_id", None), state), stateful=True)
-sdf["user"] = sdf.apply(lambda row,state: lookup_user(row["user"], state), stateful=True)
-
-
-sdf["parent_user_id"] = sdf.apply(lambda row: row.get("parent_user_id", None))
-sdf["thread_ts"] = sdf.apply(lambda row: row.get("thread_ts", None))
-
-
-sdf = sdf[["text", "channel", "user","text", "thread_ts", "parent_user"]]
+sdf = sdf.update(lookup_users, stateful=True)
 
 sdf = sdf.update(lambda row: print(row))
 
-sdf = sdf.to_topic(output_topic)
+#sdf = sdf.to_topic(output_topic)
 
 if __name__ == "__main__":
     app.run(sdf)
