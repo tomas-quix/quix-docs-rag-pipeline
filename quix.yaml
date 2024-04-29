@@ -248,6 +248,11 @@ deployments:
         description: Name of the output topic to write into
         required: true
         value: slack-internal-raw-history
+      - name: slack_token
+        inputType: Secret
+        description: ''
+        required: true
+        secretKey: slack_token
   - name: Slack history preprocessing (internal)
     application: slack-history-preprocessing
     deploymentType: Service
