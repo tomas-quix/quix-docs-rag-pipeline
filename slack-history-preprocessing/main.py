@@ -8,7 +8,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-app = Application.Quix("slack-history-preprocessing-v1.1", auto_offset_reset="earliest")
+app = Application.Quix(
+    "slack-history-preprocessing-v1.1", 
+    auto_offset_reset="earliest",
+    on_processing_error=lambda ex, row, *_: print(row.value))
 
 input_topic = app.topic(os.environ["input"])
 output_topic = app.topic(os.environ["output"])
@@ -18,6 +21,7 @@ sdf = app.dataframe(input_topic)
 
 #sdf = sdf[sdf['type'] == 'message']
 sdf = sdf[sdf.contains('channel_id')]
+sdf = sdf[sdf.contains("user")]
 
 sdf["thread_ts"] = sdf.apply(lambda row: float(row["thread_ts"]) if "thread_ts" in row else None)
 
@@ -39,7 +43,7 @@ def project_messages(row: dict):
     }
     
     if 'replies' in row:
-        result["replies"] = list(map(lambda reply: project_replies(reply), row['replies']))
+        result["replies"] = list(map(lambda reply: project_replies(reply), filter(lambda row: 'user' in row, row['replies'])))
     
     return result
 
