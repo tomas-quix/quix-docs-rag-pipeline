@@ -238,7 +238,7 @@ deployments:
         inputType: OutputTopic
         description: Name of the output topic to write to.
         required: false
-        value: slack-internal-aggregated-by-thread
+        value: slack-aggregated-by-thread
   - name: Slack SDK Enrichment 2
     application: slack-sdk-enrichment
     deploymentType: Service
