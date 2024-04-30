@@ -37,11 +37,14 @@ qdrant.get_collection(
     collection_name=collection,
 )
 
+# Define a namespace (can be any valid UUID)
+namespace = uuid.UUID('12345678-1234-5678-1234-567812345678')
+
 # Define the ingestion function
 def ingest_vectors(row):
 
   single_record = models.PointStruct(
-    id=str(uuid.uuid4()),
+    id=str(uuid.uuid5(namespace, row["doc_id"])),
     vector=row['embeddings'],
     payload=row
     )
@@ -59,7 +62,7 @@ offsetlimit = 125
 #         app.stop()
 
 app = Application.Quix(
-    consumer_group="qdrant-ingestion-v6.1",
+    consumer_group="qdrant-ingestion-v6.3",
     auto_offset_reset="earliest",
 )
 
@@ -68,6 +71,10 @@ input_topic = app.topic(os.environ['input']) # Merlin.. i updated this for you
 
 # Initialize a streaming dataframe based on the stream of messages from the input topic:
 sdf = app.dataframe(topic=input_topic)
+
+sdf = sdf.filter(lambda row: ' ' not in str(bytes.decode(message_key())))
+sdf = sdf.filter(lambda row: "-" in str(bytes.decode(message_key())))
+
 
 sdf = sdf[sdf.contains('page_content')]
 
