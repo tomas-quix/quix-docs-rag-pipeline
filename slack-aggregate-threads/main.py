@@ -19,11 +19,9 @@ def aggregate_threads(row: dict, state: State):
     
     default_state = {**row, 'replies': []}
     
-    if "parent_user" not in row:
-        thread = default_state
-    else:
-        thread = state.get(state_key, default_state)
+    thread = state.get(state_key, default_state)
     
+    if row['event_ts'] != row['thread_ts']:
         thread['replies'].append(row)
     
     state.set(state_key, thread)
