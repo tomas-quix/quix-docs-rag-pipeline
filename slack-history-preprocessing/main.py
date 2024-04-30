@@ -9,7 +9,7 @@ load_dotenv()
 
 
 app = Application.Quix(
-    "slack-history-preprocessing-v1.1", 
+    "slack-history-preprocessing-v1.3", 
     auto_offset_reset="earliest",
     on_processing_error=lambda ex, row, *_: print(row.value))
 
@@ -52,7 +52,7 @@ sdf = sdf.apply(project_messages)
 sdf = sdf.update(lambda row: print(json.dumps(row, indent=4)))
 #sdf = sdf.update(lambda row: print(row))
 
-sdf = sdf.to_topic(output_topic)
+sdf = sdf.to_topic(output_topic, key=lambda row: f"{row['user']}-{row['thread_ts']})
 
 if __name__ == "__main__":
     app.run(sdf)
