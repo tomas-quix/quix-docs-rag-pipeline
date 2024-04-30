@@ -54,7 +54,7 @@ sdf = sdf.apply(project_messages)
 sdf = sdf.update(lambda row: print(json.dumps(row, indent=4)))
 #sdf = sdf.update(lambda row: print(row))
 
-sdf = sdf.to_topic(output_topic, key=lambda row: f"{row['user']}-{row['thread_ts']})
+sdf = sdf.to_topic(output_topic, key=lambda row: f"{row['user']}-{row['thread_ts']}")
 
 if __name__ == "__main__":
     app.run(sdf)
