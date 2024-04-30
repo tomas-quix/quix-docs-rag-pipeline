@@ -44,7 +44,9 @@ def project_messages(row: dict):
     
     if 'replies' in row:
         result["replies"] = list(map(lambda reply: project_replies(reply), filter(lambda row: 'user' in row, row['replies'])))
-    
+    else:
+        result["replies"] = []
+        
     return result
 
 sdf = sdf.apply(project_messages)    
