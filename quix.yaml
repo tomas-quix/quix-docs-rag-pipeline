@@ -126,7 +126,7 @@ deployments:
       cpu: 200
       memory: 500
       replicas: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: input
         inputType: InputTopic
@@ -256,7 +256,7 @@ deployments:
     state:
       enabled: true
       size: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: input
         inputType: InputTopic
@@ -276,7 +276,7 @@ deployments:
       cpu: 1000
       memory: 1000
       replicas: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: input
         inputType: InputTopic
@@ -405,13 +405,6 @@ topics:
       retentionInMinutes: 1440
       retentionInBytes: 52428800
   - name: slack-internal-raw
-    persisted: false
-    configuration:
-      partitions: 2
-      replicationFactor: 2
-      retentionInMinutes: -1
-      retentionInBytes: 524288000
-  - name: slack-internal-grouped-by-thread
     persisted: false
     configuration:
       partitions: 2
