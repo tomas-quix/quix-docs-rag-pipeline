@@ -15,7 +15,7 @@ output_topic = app.topic(os.environ["output"])
 def get_thread_key(row: dict):
     print(row)
     state_key = f"{row['parent_user_id'] if ('parent_user_id' in row) else row['user']}"
-    state_key += f"- {row['thread_ts'] if ('thread_ts' in row) else row['event_ts']}"
+    state_key += f"-{row['thread_ts'] if ('thread_ts' in row) else row['event_ts']}"
     
     return state_key
 
