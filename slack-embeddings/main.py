@@ -19,7 +19,7 @@ def create_embeddings(row):
     text += f" user {row['user']} posted: {row['text']}"
     
     for reply in row['replies']:
-        text = f"At {datetime.datetime.fromtimestamp(reply['event_ts'])}"
+        text += f"At {datetime.datetime.fromtimestamp(reply['event_ts'])}"
         text += f" user {reply['user']} replied to that with text: {reply['text']}"
         
     embeddings = encoder.encode(text)
