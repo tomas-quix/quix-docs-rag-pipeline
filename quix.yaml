@@ -118,34 +118,6 @@ deployments:
         description: ''
         required: false
         value: embeddings-v2
-  - name: Slack SDK Enrichment
-    application: slack-sdk-enrichment
-    deploymentType: Service
-    version: latest
-    resources:
-      cpu: 1000
-      memory: 1000
-      replicas: 1
-    state:
-      enabled: true
-      size: 1
-    desiredStatus: Stopped
-    variables:
-      - name: input
-        inputType: InputTopic
-        description: Name of the input topic to listen to.
-        required: false
-        value: slack-raw
-      - name: output
-        inputType: OutputTopic
-        description: Name of the output topic to write to.
-        required: false
-        value: slack-enriched
-      - name: slack_token
-        inputType: Secret
-        description: ''
-        required: true
-        secretKey: slack_token
   - name: Group By Threads (internal)
     application: slack-group-by-threads
     deploymentType: Service
@@ -154,7 +126,7 @@ deployments:
       cpu: 200
       memory: 500
       replicas: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: input
         inputType: InputTopic
@@ -197,7 +169,7 @@ deployments:
       cpu: 200
       memory: 500
       replicas: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: input
         inputType: InputTopic
@@ -261,7 +233,7 @@ deployments:
       cpu: 200
       memory: 500
       replicas: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: input
         inputType: InputTopic
@@ -284,7 +256,7 @@ deployments:
     state:
       enabled: true
       size: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: input
         inputType: InputTopic
@@ -432,13 +404,6 @@ topics:
       replicationFactor: 2
       retentionInMinutes: 1440
       retentionInBytes: 52428800
-  - name: slack-aggregated-by-thread
-    persisted: false
-    configuration:
-      partitions: 1
-      replicationFactor: 2
-      retentionInMinutes: 1440
-      retentionInBytes: 52428800
   - name: slack-internal-raw
     persisted: false
     configuration:
@@ -460,6 +425,13 @@ topics:
       replicationFactor: 2
       retentionInMinutes: 60
       retentionInBytes: 524288000
+  - name: embeddings
+    persisted: false
+    configuration:
+      partitions: 1
+      replicationFactor: 2
+      retentionInMinutes: 1440
+      retentionInBytes: 52428800
   - name: slack-internal-aggregated-by-thread
     persisted: false
     configuration:
@@ -468,13 +440,6 @@ topics:
       retentionInMinutes: 1440
       retentionInBytes: 52428800
   - name: slack-enriched
-    persisted: false
-    configuration:
-      partitions: 1
-      replicationFactor: 2
-      retentionInMinutes: 1440
-      retentionInBytes: 52428800
-  - name: embeddings
     persisted: false
     configuration:
       partitions: 1

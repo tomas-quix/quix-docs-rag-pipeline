@@ -23,7 +23,7 @@ sdf = app.dataframe(input_topic)
 sdf = sdf[sdf.contains('channel_id')]
 sdf = sdf[sdf.contains("user")]
 
-sdf["thread_ts"] = sdf.apply(lambda row: float(row["thread_ts"]) if "thread_ts" in row else None)
+sdf["thread_ts"] = sdf.apply(lambda row: float(row["thread_ts"] if "thread_ts" in row else row['ts']))
 
 def project_replies(row: dict):
     return {
@@ -44,7 +44,9 @@ def project_messages(row: dict):
     
     if 'replies' in row:
         result["replies"] = list(map(lambda reply: project_replies(reply), filter(lambda row: 'user' in row, row['replies'])))
-    
+    else:
+        result["replies"] = []
+        
     return result
 
 sdf = sdf.apply(project_messages)    

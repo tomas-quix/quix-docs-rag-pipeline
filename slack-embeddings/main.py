@@ -26,7 +26,7 @@ def create_embeddings(row):
     embedding_list = embeddings.tolist() # Conversion step because SentenceTransformer outputs a numpy Array but Qdrant expects a plain list
     print(f'Created vector: "{embedding_list}"')
 
-    id = f"{bytes.decode(message_key())}_{row['event_ts']}"
+    id = f"{bytes.decode(message_key())}"
 
     return {
         'page_content': text,
