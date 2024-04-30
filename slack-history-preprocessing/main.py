@@ -23,7 +23,7 @@ sdf = app.dataframe(input_topic)
 sdf = sdf[sdf.contains('channel_id')]
 sdf = sdf[sdf.contains("user")]
 
-sdf["thread_ts"] = sdf.apply(lambda row: float(row["thread_ts"]) if "thread_ts" in row else None)
+sdf["thread_ts"] = sdf.apply(lambda row: float(row["thread_ts"] if "thread_ts" in row else row['ts']))
 
 def project_replies(row: dict):
     return {
