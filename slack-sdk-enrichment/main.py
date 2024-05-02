@@ -35,7 +35,7 @@ def lookup_users(row:dict, state: State):
     if user_id is None:
         return None
     
-    user = redis_client.get(user_id)
+    user = redis_client.get('user_' + user_id)
     
     if user is None:
         print("Getting info about user: " + user_id)
@@ -45,7 +45,7 @@ def lookup_users(row:dict, state: State):
         else:
             user = user_dto["user"]['profile']["real_name"]
         print(user)
-        redis_client.set(user_id, user)
+        redis_client.set('user_' + user_id, user)
     
     row['user'] = user
     
@@ -57,16 +57,19 @@ def lookup_users(row:dict, state: State):
         
 def lookup_channel(row:dict, state: State):
     channel_id = row["channel"]
-    channel_name = state.get(channel_id, None)
+    
+    channel_name = redis_client.get('channel' + channel_id)
     
     if channel_name is None:
         print("Getting info about channel: " + channel_id)
         
         channel_dto = client.conversations_info(channel=channel_id)
-        print(channel_dto)
         
         channel_name = channel_dto["channel"]["name"]
         state.set(channel_id, channel_name)
+        redis_client.set('channel_' + channel_id, channel_name)
+        print(channel_name)
+        
         
     return channel_name
 
