@@ -29,6 +29,7 @@ variables:
   - name: redis_password
     inputType: Secret
     description: ''
+    defaultValue: redis_token
     required: true
 dockerfile: dockerfile
 runEntryPoint: main.py
