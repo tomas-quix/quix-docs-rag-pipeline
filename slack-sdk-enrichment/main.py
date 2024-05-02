@@ -4,6 +4,7 @@ from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 import uuid
 import json
+import redis
 
 
 # for local dev, load env vars from a .env file
@@ -13,7 +14,16 @@ load_dotenv()
 client = WebClient(token=os.environ["slack_token"])
 
 
-app = Application.Quix("slack-enrich-v2.4", auto_offset_reset="latest", use_changelog_topics=False)
+# Connection details - replace these with your actual RedisCloud credentials
+host = os.environ['redis_host'] 
+port = int(os.environ['redis_port'])
+password = os.environ['redis_password']
+
+# Create the Redis connection
+redis_client = redis.Redis(host=host, port=port, password=password, decode_responses=True)
+
+
+app = Application.Quix("slack-enrich-v2.4", auto_offset_reset="latest", use_changelog_topics=True)
 
 input_topic = app.topic(os.environ["input"])
 output_topic = app.topic(os.environ["output"])
@@ -25,18 +35,20 @@ def lookup_users(row:dict, state: State):
     if user_id is None:
         return None
     
-    user = state.get(user_id, None)
+    user = redis_client.get(user_id)
     
     if user is None:
         print("Getting info about user: " + user_id)
         user_dto = client.users_info(user=user_id)
-        print(user_dto)
         if 'real_name' in user_dto["user"]:
             user = user_dto["user"]["real_name"]
         else:
             user = user_dto["user"]['profile']["real_name"]
-        row['user'] = user
-        state.set(user_id, user)
+        print(user)
+        redis_client.set(user_id, user)
+    
+    row['user'] = user
+    
         
     if 'replies' in row:
         for reply in row['replies']:
