@@ -169,7 +169,7 @@ deployments:
       cpu: 200
       memory: 500
       replicas: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: input
         inputType: InputTopic
@@ -206,6 +206,21 @@ deployments:
         description: ''
         required: true
         secretKey: slack_token
+      - name: redis_host
+        inputType: FreeText
+        description: ''
+        required: true
+        value: redis-16017.c251.east-us-mz.azure.redns.redis-cloud.com
+      - name: redis_port
+        inputType: FreeText
+        description: ''
+        required: true
+        value: 16017
+      - name: redis_password
+        inputType: Secret
+        description: ''
+        required: true
+        secretKey: redis_token
   - name: Slack internal batch load
     application: slack-history-batch-load
     deploymentType: Job
@@ -276,7 +291,7 @@ deployments:
       cpu: 1000
       memory: 1000
       replicas: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: input
         inputType: InputTopic
