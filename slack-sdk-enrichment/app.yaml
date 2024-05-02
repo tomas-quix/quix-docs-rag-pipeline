@@ -17,12 +17,12 @@ variables:
     defaultValue: slack_token
     required: true
   - name: redis_host
-    inputType: PlainText
+    inputType: FreeText
     description: ''
     defaultValue: redis-16017.c251.east-us-mz.azure.redns.redis-cloud.com
     required: true
   - name: redis_port
-    inputType: PlainText
+    inputType: FreeText
     description: ''
     defaultValue: 16017
     required: true
