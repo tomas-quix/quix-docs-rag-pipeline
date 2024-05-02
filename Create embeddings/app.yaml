@@ -9,7 +9,7 @@ variables:
   - name: output
     inputType: OutputTopic
     description: Name of the output topic to write to.
-    defaultValue: embeddings-sbert-all-MiniLM-L6-v2
+    defaultValue: embeddings
     required: false
   - name: consumergroup
     inputType: FreeText
