@@ -58,7 +58,7 @@ def lookup_users(row:dict, state: State):
 def lookup_channel(row:dict, state: State):
     channel_id = row["channel"]
     
-    channel_name = redis_client.get('channel' + channel_id)
+    channel_name = redis_client.get('channel_' + channel_id)
     
     if channel_name is None:
         print("Getting info about channel: " + channel_id)
