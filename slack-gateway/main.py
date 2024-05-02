@@ -28,7 +28,6 @@ producer = app.get_producer()
 logger = get_logger()
 
 app = Flask(__name__)
-client = WebClient(token=os.environ['slack_token'])
 
 @app.route('/slack/events', methods=['POST'])
 def slack_events():
