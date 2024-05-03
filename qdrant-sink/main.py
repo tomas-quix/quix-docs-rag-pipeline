@@ -72,12 +72,6 @@ input_topic = app.topic(os.environ['input']) # Merlin.. i updated this for you
 # Initialize a streaming dataframe based on the stream of messages from the input topic:
 sdf = app.dataframe(topic=input_topic)
 
-sdf = sdf.filter(lambda row: ' ' not in str(bytes.decode(message_key())))
-sdf = sdf.filter(lambda row: "-" in str(bytes.decode(message_key())))
-
-
-sdf = sdf[sdf.contains('page_content')]
-
 # INGESTION HAPPENS HERE
 ### Trigger the embedding function for any new messages(rows) detected in the filtered SDF
 sdf = sdf.update(lambda row: ingest_vectors(row))
