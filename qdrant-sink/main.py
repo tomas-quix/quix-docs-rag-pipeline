@@ -55,7 +55,7 @@ def ingest_vectors(row):
         points=[single_record]
     )
 
-  print(f"Ingested vector from thread: {bytes.decode(message_key())}")
+    print(f"Ingested vector from thread: {bytes.decode(message_key())}")
   
   
 offsetlimit = 125
