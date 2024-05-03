@@ -22,9 +22,9 @@ createcollection = os.environ['createcollection'] == "true"
 
 print(createcollection)
 
-if createcollection == True:
+if not qdrant.collection_exists(collection):
   # Create collection to store items
-  qdrant.recreate_collection(
+  qdrant.create_collection(
       collection_name=collection,
       vectors_config=models.VectorParams(
           size=int(os.environ["vector_size"]), # Vector size is defined by used model
