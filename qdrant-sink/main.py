@@ -44,7 +44,7 @@ namespace = uuid.UUID('12345678-1234-5678-1234-567812345678')
 def ingest_vectors(row):
 
   single_record = models.PointStruct(
-    id=str(uuid.uuid5(namespace, row["doc_id"])),
+    id=str(uuid.uuid5(namespace, str(row["doc_id"]))),
     vector=row['embeddings'],
     payload=row
     )
