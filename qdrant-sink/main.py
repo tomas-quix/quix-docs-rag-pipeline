@@ -65,7 +65,7 @@ offsetlimit = 125
 #         app.stop()
 
 app = Application.Quix(
-    consumer_group="qdrant-ingestion-v6.3",
+    consumer_group="qdrant-ingestion-v6.4",
     auto_offset_reset="earliest",
 )
 
