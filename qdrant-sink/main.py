@@ -1,4 +1,4 @@
-from quixstreams import Application, message_key
+from quixstreams import Application, message_key, message_context
 from qdrant_client import models, QdrantClient
 
 import os
@@ -41,15 +41,18 @@ qdrant.get_collection(
 # Define the ingestion function
 def ingest_vectors(row):
 
-  single_record = models.PointStruct(
-    id=row['metadata']['uuid'],
-    vector=row['embeddings'],
-    payload=row
+    row['metadata']['partition'] = message_context().partition
+    row['metadata']['offset'] = message_context().offset
+
+    single_record = models.PointStruct(
+        id=row['metadata']['uuid'],
+        vector=row['embeddings'],
+        payload=row
     )
 
-  qdrant.upload_points(
-      collection_name=collection,
-      points=[single_record]
+    qdrant.upload_points(
+        collection_name=collection,
+        points=[single_record]
     )
 
   print(f"Ingested vector from thread: {bytes.decode(message_key())}")
