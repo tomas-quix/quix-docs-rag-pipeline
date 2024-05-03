@@ -37,14 +37,12 @@ qdrant.get_collection(
     collection_name=collection,
 )
 
-# Define a namespace (can be any valid UUID)
-namespace = uuid.UUID('12345678-1234-5678-1234-567812345678')
 
 # Define the ingestion function
 def ingest_vectors(row):
 
   single_record = models.PointStruct(
-    id=str(uuid.uuid5(namespace, str(row["doc_id"]))),
+    id=row['metadata']['uuid']
     vector=row['embeddings'],
     payload=row
     )
@@ -55,6 +53,8 @@ def ingest_vectors(row):
     )
 
   print(f"Ingested vector from thread: {bytes.decode(message_key())}")
+  
+  
 offsetlimit = 125
 
 # def on_message_processed(topic, partition, offset):

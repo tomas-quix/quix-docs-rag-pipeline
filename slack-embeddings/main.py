@@ -12,6 +12,9 @@ load_dotenv()
 
 encoder = SentenceTransformer('all-MiniLM-L6-v2') # Model to create embeddings
 
+# Define a namespace (can be any valid UUID)
+namespace = uuid.UUID('12345678-1234-5678-1234-567812345678')
+
 # Define the embedding function
 def create_embeddings(row):
     text = f"At {datetime.datetime.fromtimestamp(row['event_ts'])}"
@@ -34,7 +37,8 @@ def create_embeddings(row):
         'doc_id': id,
         'metadata': {
             'title': row['text'],
-            'id': id
+            'id': id,
+            'uuid': str(uuid.uuid5(namespace, id)),
         }
     }
 
