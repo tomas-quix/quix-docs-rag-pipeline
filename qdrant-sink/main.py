@@ -72,6 +72,8 @@ input_topic = app.topic(os.environ['input']) # Merlin.. i updated this for you
 # Initialize a streaming dataframe based on the stream of messages from the input topic:
 sdf = app.dataframe(topic=input_topic)
 
+sdf = sdf[sdf['metadata'].contains('uuid')]
+
 # INGESTION HAPPENS HERE
 ### Trigger the embedding function for any new messages(rows) detected in the filtered SDF
 sdf = sdf.update(lambda row: ingest_vectors(row))
