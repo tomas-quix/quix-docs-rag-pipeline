@@ -331,7 +331,7 @@ topics:
   - name: embeddings-sbert-all-MiniLM-L6-v2
     persisted: false
     configuration:
-      partitions: 1
+      partitions: 8
       replicationFactor: 2
       retentionInMinutes: -1
       retentionInBytes: 270532608
