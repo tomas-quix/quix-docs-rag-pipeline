@@ -37,7 +37,7 @@ def download_file(id: str):
 def download_files(row: dict):
     if "files" in row:
         for file in row['files']:
-            row['text'] =+ ("\n" + download_file(file))
+            row['text'] += "\n" + download_file(file)
             
 
 def lookup_users(row:dict, state: State):
