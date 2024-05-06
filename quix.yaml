@@ -234,7 +234,7 @@ deployments:
         inputType: OutputTopic
         description: Name of the output topic to write into
         required: true
-        value: slack-internal-raw-history
+        value: slack-raw-history
       - name: slack_token
         inputType: Secret
         description: ''
