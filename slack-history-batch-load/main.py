@@ -67,7 +67,7 @@ def fetch_messages_from_channel(client, channel_id):
             message['channel_id'] = channel_id
             
             if "My SDK service did not recover from yestrday downtime of prod Kafka, it just hanged. Here are the logs:" in message['text']:
-                print(message)
+                print(json.dumps(message, indent=4))
                 return
 
 
