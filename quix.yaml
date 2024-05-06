@@ -333,8 +333,8 @@ topics:
     configuration:
       partitions: 1
       replicationFactor: 2
-      retentionInMinutes: 1440
-      retentionInBytes: 52428800
+      retentionInMinutes: -1
+      retentionInBytes: 270532608
   - name: raw-text-chunks-test-01-04
     persisted: false
     configuration:
