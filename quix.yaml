@@ -33,7 +33,7 @@ deployments:
         inputType: FreeText
         description: ''
         required: true
-        value: quixdocs_C1000_O200_2024-04-05-v2
+        value: quixdocs_C1000_O200_2024-04-05-v10
       - name: output
         inputType: OutputTopic
         description: ''
