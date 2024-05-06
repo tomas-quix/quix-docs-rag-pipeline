@@ -1,4 +1,4 @@
-from quixstreams import Application, message_key
+from quixstreams import Application, message_key, message_context
 from qdrant_client import models, QdrantClient
 
 import os
@@ -22,9 +22,9 @@ createcollection = os.environ['createcollection'] == "true"
 
 print(createcollection)
 
-if createcollection == True:
+if not qdrant.collection_exists(collection):
   # Create collection to store items
-  qdrant.recreate_collection(
+  qdrant.create_collection(
       collection_name=collection,
       vectors_config=models.VectorParams(
           size=int(os.environ["vector_size"]), # Vector size is defined by used model
@@ -41,18 +41,21 @@ qdrant.get_collection(
 # Define the ingestion function
 def ingest_vectors(row):
 
-  single_record = models.PointStruct(
-    id=row['metadata']['uuid'],
-    vector=row['embeddings'],
-    payload=row
+    row['metadata']['partition'] = message_context().partition
+    row['metadata']['offset'] = message_context().offset
+
+    single_record = models.PointStruct(
+        id=row['metadata']['uuid'],
+        vector=row['embeddings'],
+        payload=row
     )
 
-  qdrant.upload_points(
-      collection_name=collection,
-      points=[single_record]
+    qdrant.upload_points(
+        collection_name=collection,
+        points=[single_record]
     )
 
-  print(f"Ingested vector from thread: {bytes.decode(message_key())}")
+    print(f"Ingested vector from thread: {bytes.decode(message_key())}")
   
   
 offsetlimit = 125
@@ -62,7 +65,7 @@ offsetlimit = 125
 #         app.stop()
 
 app = Application.Quix(
-    consumer_group="qdrant-ingestion-v6.3",
+    consumer_group="qdrant-ingestion-v6.4",
     auto_offset_reset="earliest",
 )
 
@@ -71,6 +74,8 @@ input_topic = app.topic(os.environ['input']) # Merlin.. i updated this for you
 
 # Initialize a streaming dataframe based on the stream of messages from the input topic:
 sdf = app.dataframe(topic=input_topic)
+
+sdf = sdf[sdf['metadata'].contains('uuid')]
 
 # INGESTION HAPPENS HERE
 ### Trigger the embedding function for any new messages(rows) detected in the filtered SDF

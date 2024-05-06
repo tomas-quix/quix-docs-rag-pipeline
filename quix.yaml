@@ -100,7 +100,7 @@ deployments:
     resources:
       cpu: 1000
       memory: 2000
-      replicas: 1
+      replicas: 4
     desiredStatus: Running
     variables:
       - name: input
@@ -126,7 +126,7 @@ deployments:
       cpu: 200
       memory: 500
       replicas: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: input
         inputType: InputTopic
@@ -290,7 +290,7 @@ deployments:
     resources:
       cpu: 1000
       memory: 1000
-      replicas: 1
+      replicas: 4
     desiredStatus: Running
     variables:
       - name: input
@@ -302,7 +302,7 @@ deployments:
         inputType: FreeText
         description: ''
         required: true
-        value: quixdocs_C1000_O200_2024-04-05-v7
+        value: quixdocs_C1000_O200_2024-04-05-v9
       - name: qdrant_apikey
         inputType: Secret
         description: ''
@@ -331,10 +331,10 @@ topics:
   - name: embeddings-sbert-all-MiniLM-L6-v2
     persisted: false
     configuration:
-      partitions: 1
+      partitions: 8
       replicationFactor: 2
-      retentionInMinutes: 1440
-      retentionInBytes: 52428800
+      retentionInMinutes: -1
+      retentionInBytes: 270532608
   - name: raw-text-chunks-test-01-04
     persisted: false
     configuration:
@@ -436,10 +436,10 @@ topics:
   - name: embeddings
     persisted: false
     configuration:
-      partitions: 1
+      partitions: 8
       replicationFactor: 2
-      retentionInMinutes: 1440
-      retentionInBytes: 52428800
+      retentionInMinutes: -1
+      retentionInBytes: 524288000
   - name: slack-internal-aggregated-by-thread
     persisted: false
     configuration:

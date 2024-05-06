@@ -81,6 +81,8 @@ if __name__ == "__main__":
     all_messages = []
 
     for channel in channels:
+        if channel['id'] is not "C01H1LQHCAU":
+            continue
         channel_id = channel['id']
         channel_name = channel['name']
         print(f"Fetching messages from channel: {channel_name}")
