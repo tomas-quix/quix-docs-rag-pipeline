@@ -72,7 +72,7 @@ def fetch_messages_from_channel(client, channel_id):
 
 
             #producer.produce(topic.name, json.dumps(message), channel_id, timestamp=int(float(message['ts'])* 1000))
-            print(message)
+            #print(message)
         
        
         
