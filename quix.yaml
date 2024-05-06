@@ -132,12 +132,12 @@ deployments:
         inputType: InputTopic
         description: Name of the input topic to listen to.
         required: false
-        value: slack-internal-raw
+        value: slack-raw
       - name: output
         inputType: OutputTopic
         description: Name of the output topic to write to.
         required: false
-        value: slack-internal-grouped-by-thread
+        value: slack-grouped-by-thread
   - name: Internal Slack Gateway
     application: slack-gateway
     deploymentType: Service
