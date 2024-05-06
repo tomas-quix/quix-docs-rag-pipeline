@@ -23,10 +23,22 @@ password = os.environ['redis_password']
 redis_client = redis.Redis(host=host, port=port, password=password, decode_responses=True)
 
 
-app = Application.Quix("slack-enrich-v2.4", auto_offset_reset="latest", use_changelog_topics=True)
+app = Application.Quix("slack-enrich-v2.6", auto_offset_reset="earliest", use_changelog_topics=True)
 
 input_topic = app.topic(os.environ["input"])
 output_topic = app.topic(os.environ["output"])
+
+
+def download_file(id: str):
+    response = client.files_info(file=id)
+    
+    return response['content']
+
+def download_files(row: dict):
+    if "files" in row:
+        for file in row['files']:
+            row['text'] =+ "\n" + download_file(file)
+            
 
 def lookup_users(row:dict, state: State):
     
@@ -49,6 +61,7 @@ def lookup_users(row:dict, state: State):
     
     row['user'] = user
     
+    download_files(row)
         
     if 'replies' in row:
         for reply in row['replies']:
@@ -84,7 +97,7 @@ sdf = sdf.update(lookup_users, stateful=True)
 
 sdf = sdf.update(lambda row: print(row))
 
-sdf = sdf.to_topic(output_topic)
+#sdf = sdf.to_topic(output_topic)
 
 if __name__ == "__main__":
     app.run(sdf)
