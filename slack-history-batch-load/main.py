@@ -66,7 +66,11 @@ def fetch_messages_from_channel(client, channel_id):
             
             message['channel_id'] = channel_id
             
-            producer.produce(topic.name, json.dumps(message), channel_id, timestamp=int(float(message['ts'])* 1000))
+            if "My SDK service did not recover from yestrday downtime of prod Kafka, it just hanged. Here are the logs:" in message['text']:
+                print(message)
+
+
+            #producer.produce(topic.name, json.dumps(message), channel_id, timestamp=int(float(message['ts'])* 1000))
             print(message)
         
        
