@@ -118,7 +118,7 @@ deployments:
         description: ''
         required: false
         value: embeddings-v3
-  - name: Group By Threads (internal)
+  - name: Group By Threads
     application: slack-group-by-threads
     deploymentType: Service
     version: latest
@@ -161,7 +161,7 @@ deployments:
         description: ''
         required: false
         secretKey: slack_token
-  - name: Aggregate by Thread (internal)
+  - name: Aggregate by Thread
     application: slack-aggregate-threads
     deploymentType: Service
     version: latest
@@ -181,7 +181,7 @@ deployments:
         description: Name of the output topic to write to.
         required: false
         value: slack-aggregated-by-thread
-  - name: Slack SDK Enrichment (internal)
+  - name: Slack SDK Enrichment
     application: slack-sdk-enrichment
     deploymentType: Service
     version: latest
@@ -240,7 +240,7 @@ deployments:
         description: ''
         required: true
         secretKey: slack_token
-  - name: Slack history preprocessing (internal)
+  - name: Slack history preprocessing
     application: slack-history-preprocessing
     deploymentType: Service
     version: latest
