@@ -62,17 +62,12 @@ def fetch_messages_from_channel(client, channel_id):
         for message in messages:
             if message.get('thread_ts') and message['thread_ts'] == message['ts']:  # Check it's a thread parent
                 replies = fetch_thread_replies(client, channel_id, message['thread_ts'])
-                message['replies'] = list(filter(lambda row: row['event_ts'] != message['event_ts'], replies))
+                message['replies'] = list(filter(lambda row: 'event_ts' in row and row['event_ts'] != message['event_ts'], replies))
                 
             message['channel_id'] = channel_id
             
-            if "My SDK service did not recover from yestrday downtime of prod Kafka, it just hanged. Here are the logs:" in message['text']:
-                print(json.dumps(message, indent=4))
-                return
-
-
-            #producer.produce(topic.name, json.dumps(message), channel_id, timestamp=int(float(message['ts'])* 1000))
-            #print(message)
+            producer.produce(topic.name, json.dumps(message), channel_id, timestamp=int(float(message['ts'])* 1000))
+            print(message)
         
        
         
@@ -86,8 +81,6 @@ if __name__ == "__main__":
     all_messages = []
 
     for channel in channels:
-        if channel['name'] != "sdk-team":
-            continue
         channel_id = channel['id']
         channel_name = channel['name']
         print(f"Fetching messages from channel: {channel_name}")
