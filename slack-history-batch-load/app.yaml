@@ -1,5 +1,5 @@
 name: slack-history-batch-load
-language: Python
+language: python
 variables:
   - name: output
     inputType: OutputTopic
