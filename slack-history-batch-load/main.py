@@ -59,11 +59,11 @@ def fetch_messages_from_channel(client, channel_id):
             response = client.conversations_history(channel=channel_id, cursor=response['response_metadata']['next_cursor'])
             messages.extend(response['messages'])
         
-        for message in response['messages']:
+        for message in messages:
             if message.get('thread_ts') and message['thread_ts'] == message['ts']:  # Check it's a thread parent
                 replies = fetch_thread_replies(client, channel_id, message['thread_ts'])
-                message['replies'] = replies
-            
+                message['replies'] = list(filter(lambda row: row['event_ts'] != message['event_ts'], replies))
+                
             message['channel_id'] = channel_id
             
             producer.produce(topic.name, json.dumps(message), channel_id, timestamp=int(float(message['ts'])* 1000))

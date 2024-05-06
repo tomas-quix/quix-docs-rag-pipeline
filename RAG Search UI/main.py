@@ -96,37 +96,37 @@ async def main(message: cl.Message):
 
         res = await chain.acall(message.content, callbacks=[cb]) # Call to lchain 
         answer = res["answer"]
-        #source_documents = res["source_documents"]  # type: List[Document]
+        source_documents = res["source_documents"]  # type: List[Document]
 
         # Log the source documents to see if any have None as page_content
-        #logger.info(f"Source documents: {source_documents}")
+        logger.info(f"Source documents: {source_documents}")
 
         text_elements = []  # type: List[cl.Text]
 
-        # if source_documents:
-        #     seen_urls = set()  # Set to track seen URLs
-        #     text_elements = []  # Reset text_elements to ensure it's empty before adding new elements
+        if source_documents:
+            seen_urls = set()  # Set to track seen URLs
+            text_elements = []  # Reset text_elements to ensure it's empty before adding new elements
 
-        #     for source_idx, source_doc in enumerate(source_documents):
-        #         source_url = source_doc.metadata.get('url', '#')
-        #         if source_url not in seen_urls:  # Check if the URL has not been seen before
-        #             seen_urls.add(source_url)  # Mark this URL as seen
+            for source_idx, source_doc in enumerate(source_documents):
+                source_url = source_doc.metadata.get('url', '#')
+                if source_url not in seen_urls:  # Check if the URL has not been seen before
+                    seen_urls.add(source_url)  # Mark this URL as seen
 
-        #             source_title = source_doc.metadata.get('title', f'Source_{source_idx + 1}')
-        #             # Remove " - Quix Docs" if it exists in the title
-        #             if source_title.endswith(" - Quix Docs"):
-        #                 source_title = source_title[:-12]
+                    source_title = source_doc.metadata.get('title', f'Source_{source_idx + 1}')
+                    # Remove " - Quix Docs" if it exists in the title
+                    if source_title.endswith(" - Quix Docs"):
+                        source_title = source_title[:-12]
 
-        #             markdown_link = f"* [{source_title}]({source_url})\n"  # Bullet point added
-        #             text_elements.append(cl.Text(content=markdown_link, name="markdown"))
+                    markdown_link = f"* [{source_title}]({source_url})\n"  # Bullet point added
+                    text_elements.append(cl.Text(content=markdown_link, name="markdown"))
 
-        #     # Join with newline for bullet points
-        #     source_links = ''.join([text_el.content for text_el in text_elements])
+            # Join with newline for bullet points
+            source_links = ''.join([text_el.content for text_el in text_elements])
 
-            # if source_links:
-            #     answer += f"\n\n**Sources:**\n{source_links}"
-            # else:
-            #     answer += "\n\nNo sources found"
+            if source_links:
+                answer += f"\n\n**Sources:**\n{source_links}"
+            else:
+                answer += "\n\nNo sources found"
 
         await cl.Message(content=answer, elements=text_elements).send()
     except Exception as e:
@@ -135,47 +135,48 @@ async def main(message: cl.Message):
         # Handle the error appropriately, possibly sending a message to the user
 
     #### START QUIX STUFF ######
-    # app = Application.Quix()
-    # # app = Application(broker_address='localhost:19092')
-    # serializer = JSONSerializer()
-    # topic = app.topic(name=outputtopicname, value_serializer=serializer)
+    app = Application.Quix()
+    # app = Application(broker_address='localhost:19092')
+    serializer = JSONSerializer()
+    topic = app.topic(name=outputtopicname, value_serializer=serializer)
 
-    # source_documents_serializable = [
-    # {
-    #     "page_content": doc.page_content,
-    #     "metadata": doc.metadata
-    # }
-    # for doc in source_documents
-    # ]
+    source_documents_serializable = []
+    
+    if source_documents:
+        for doc in source_documents:
+            source_documents_serializable.append( {
+        "page_content": doc.page_content,
+        "metadata": doc.metadata
+    })
 
-    # # load_dotenv("./quix_vars.env")
-    # print(f"Producing to output topic: {outputtopicname}...\n\n")
-    # idcounter = 0
-    # with app.get_producer() as producer:
-    #     idcounter = idcounter + 1
-    #     doc_id = idcounter
-    #     doc_key = f"A{'0'*(10-len(str(doc_id)))}{doc_id}"
-    #     doc_uuid = str(uuid.uuid4())
-    #     value = {
-    #         "Timestamp": time.time_ns(),
-    #         "query": searchquery,
-    #         "answer": answer,
-    #         "matching_docs": source_documents_serializable
-    #         }
+    # load_dotenv("./quix_vars.env")
+    print(f"Producing to output topic: {outputtopicname}...\n\n")
+    idcounter = 0
+    with app.get_producer() as producer:
+        idcounter = idcounter + 1
+        doc_id = idcounter
+        doc_key = f"A{'0'*(10-len(str(doc_id)))}{doc_id}"
+        doc_uuid = str(uuid.uuid4())
+        value = {
+            "Timestamp": time.time_ns(),
+            "query": searchquery,
+            "answer": answer,
+            "matching_docs": source_documents_serializable
+            }
 
-    #     print(f"Producing value: {value}...")
-    #     # with current functionality, we need to manually serialize our data
-    #     serialized = topic.serialize(
-    #         key=doc_key,
-    #         value=value,
-    #         headers={**serializer.extra_headers, "uuid": doc_uuid},
-    #     )
+        print(f"Producing value: {value}...")
+        # with current functionality, we need to manually serialize our data
+        serialized = topic.serialize(
+            key=doc_key,
+            value=value,
+            headers={**serializer.extra_headers, "uuid": doc_uuid},
+        )
 
-    #     producer.produce(
-    #         topic=topic.name,
-    #         headers=serialized.headers,
-    #         key=serialized.key,
-    #         value=serialized.value,
-    #         )
+        producer.produce(
+            topic=topic.name,
+            headers=serialized.headers,
+            key=serialized.key,
+            value=serialized.value,
+            )
 
     print("ingested search query")
