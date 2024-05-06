@@ -155,7 +155,7 @@ deployments:
         inputType: OutputTopic
         description: This is the output topic for hello world data
         required: true
-        value: slack-internal-raw
+        value: slack-raw
       - name: slack_token
         inputType: Secret
         description: ''
