@@ -60,14 +60,12 @@ def lookup_users(row:dict, state: State):
         redis_client.set('user_' + user_id, user)
     
     row['user'] = user
-    
-    download_files(row)
-        
+            
     if 'replies' in row:
         for reply in row['replies']:
             lookup_users(reply, state)
         
-        
+
 def lookup_channel(row:dict, state: State):
     channel_id = row["channel"]
     
@@ -94,6 +92,8 @@ sdf = sdf[sdf.contains('channel')]
     
 sdf["channel"] = sdf.apply(lookup_channel, stateful=True)
 sdf = sdf.update(lookup_users, stateful=True)
+
+sdf = sdf.update(download_files)
 
 sdf = sdf.update(lambda row: print(row))
 
