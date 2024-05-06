@@ -39,7 +39,7 @@ def download_files(row: dict):
         for file in row['files']:
             row['text'] += "\n" + download_file(file)
     
-     if 'replies' in row:
+    if 'replies' in row:
         for reply in row['replies']:
             download_files(reply)
             
