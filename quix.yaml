@@ -17,7 +17,7 @@ deployments:
     publicAccess:
       enabled: true
       urlPrefix: ragsearchui-docs
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: OPENAI_API_KEY
         inputType: Secret
