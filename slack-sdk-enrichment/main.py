@@ -38,6 +38,10 @@ def download_files(row: dict):
     if "files" in row:
         for file in row['files']:
             row['text'] += "\n" + download_file(file)
+    
+     if 'replies' in row:
+        for reply in row['replies']:
+            download_files(reply)
             
 
 def lookup_users(row:dict, state: State):
