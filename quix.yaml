@@ -254,12 +254,12 @@ deployments:
         inputType: InputTopic
         description: Name of the input topic to listen to.
         required: false
-        value: slack-internal-raw-history
+        value: slack-raw-history
       - name: output
         inputType: OutputTopic
         description: Name of the output topic to write to.
         required: false
-        value: slack-internal-aggregated-by-thread
+        value: slack-aggregated-by-thread
   - name: Slack embeddings
     application: slack-embeddings
     deploymentType: Service
