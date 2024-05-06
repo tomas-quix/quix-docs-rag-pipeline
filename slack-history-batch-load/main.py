@@ -62,7 +62,7 @@ def fetch_messages_from_channel(client, channel_id):
         for message in messages:
             if message.get('thread_ts') and message['thread_ts'] == message['ts']:  # Check it's a thread parent
                 replies = fetch_thread_replies(client, channel_id, message['thread_ts'])
-                message['replies'] = list(filter(lambda row: row['event_ts'] != message['event_ts'], replies))
+                message['replies'] = list(filter(lambda row: 'event_ts' in row and row['event_ts'] != message['event_ts'], replies))
                 
             message['channel_id'] = channel_id
             
