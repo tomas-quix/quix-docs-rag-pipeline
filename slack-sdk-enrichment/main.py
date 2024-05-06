@@ -23,7 +23,7 @@ password = os.environ['redis_password']
 redis_client = redis.Redis(host=host, port=port, password=password, decode_responses=True)
 
 
-app = Application.Quix("slack-enrich-v2.6", auto_offset_reset="earliest", use_changelog_topics=True)
+app = Application.Quix("slack-enrich-v2.7", auto_offset_reset="earliest", use_changelog_topics=True)
 
 input_topic = app.topic(os.environ["input"])
 output_topic = app.topic(os.environ["output"])
