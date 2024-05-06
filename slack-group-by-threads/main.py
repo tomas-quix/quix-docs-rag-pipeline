@@ -6,7 +6,7 @@ import uuid
 from dotenv import load_dotenv
 load_dotenv()
 
-app = Application.Quix("group-by-v1.5", auto_offset_reset="earliest", use_changelog_topics=False)
+app = Application.Quix("group-by-v1.6", auto_offset_reset="earliest", use_changelog_topics=False)
 
 input_topic = app.topic(os.environ["input"])
 output_topic = app.topic(os.environ["output"])
@@ -25,12 +25,15 @@ sdf = sdf[sdf.contains('event')]
 sdf = sdf.apply(lambda row: row['event'])
 sdf = sdf[sdf.contains("user")]
 
+sdf = sdf.update(print)
+
 sdf = sdf.apply(lambda row: {
   "text": row['text'],
   "channel": row['channel'],
   "user": row['user'],
   "thread_ts": float(row["thread_ts"] if "thread_ts" in row else row["event_ts"]),
-  "event_ts": float(row['event_ts'])
+  "event_ts": float(row['event_ts']),
+  "files": list(map(lambda row: row['id'], filter(lambda f: 'mimetype' in f and f['mimetype'] == 'text/plain', row['files']))) if 'files' in row else []
 })
 
 sdf = sdf.update(print)
