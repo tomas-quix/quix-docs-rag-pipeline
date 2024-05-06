@@ -35,9 +35,10 @@ def download_file(id: str):
     return response['content']
 
 def download_files(row: dict):
-    if "files" in row:
-        for file in row['files']:
-            row['text'] =+ "\n" + download_file(file)
+    if "file_ids" in row:
+        row['files'] = []
+        for file in row['file_ids']:
+            row['files'].append(download_file(file))
             
 
 def lookup_users(row:dict, state: State):

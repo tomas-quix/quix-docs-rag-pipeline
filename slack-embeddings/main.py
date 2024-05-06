@@ -25,6 +25,9 @@ def create_embeddings(row):
         text += f"\nAt {datetime.datetime.fromtimestamp(reply['event_ts'])}"
         text += f" user {reply['user']} replied to that with text: {reply['text']}"
         
+    for file in row['files']:
+        text += "\n" + file
+        
     embeddings = encoder.encode(text)
     embedding_list = embeddings.tolist() # Conversion step because SentenceTransformer outputs a numpy Array but Qdrant expects a plain list
     print(f'Created vector: "{embedding_list}"')

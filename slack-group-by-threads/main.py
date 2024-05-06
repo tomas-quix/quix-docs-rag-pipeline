@@ -33,7 +33,7 @@ sdf = sdf.apply(lambda row: {
   "user": row['user'],
   "thread_ts": float(row["thread_ts"] if "thread_ts" in row else row["event_ts"]),
   "event_ts": float(row['event_ts']),
-  "files": list(map(lambda row: row['id'], filter(lambda f: 'mimetype' in f and f['mimetype'] == 'text/plain', row['files']))) if 'files' in row else []
+  "file_ids": list(map(lambda row: row['id'], filter(lambda f: 'mimetype' in f and f['mimetype'] == 'text/plain', row['files']))) if 'files' in row else []
 })
 
 sdf = sdf.update(print)

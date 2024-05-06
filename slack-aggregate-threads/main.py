@@ -12,7 +12,6 @@ output_topic = app.topic(os.environ["output"])
 
 sdf = app.dataframe(input_topic)
 
-
 def aggregate_threads(row: dict, state: State):
     
     state_key = bytes.decode(message_key())
@@ -37,9 +36,7 @@ def print_threads(row: dict):
     for reply in row['replies']:
         print(f"--- [{reply['user']}]: {reply['text']}")
         
-
 sdf = sdf.update(print_threads)
-
 
 sdf = sdf.to_topic(output_topic)
 
