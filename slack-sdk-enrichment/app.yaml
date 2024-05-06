@@ -1,5 +1,5 @@
 name: Slack SDK Enrichment
-language: Python
+language: python
 variables:
   - name: input
     inputType: InputTopic
