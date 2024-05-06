@@ -31,7 +31,7 @@ output_topic = app.topic(os.environ["output"])
 
 def download_file(id: str):
     response = client.files_info(file=id)
-    
+    print(response['content'])
     return str(response['content'])
 
 def download_files(row: dict):
