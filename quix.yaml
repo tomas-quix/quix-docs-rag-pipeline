@@ -107,7 +107,7 @@ deployments:
         inputType: InputTopic
         description: Name of the input topic to listen to.
         required: false
-        value: raw-text-chunks-2024-04-05-v2
+        value: raw-text-chunks
       - name: output
         inputType: OutputTopic
         description: Name of the output topic to write to.
