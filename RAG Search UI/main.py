@@ -24,6 +24,7 @@ from quixstreams.models.serializers import (
 import logging
 import chainlit as cl
 
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
