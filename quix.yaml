@@ -326,8 +326,8 @@ topics:
     configuration:
       partitions: 1
       replicationFactor: 2
-      retentionInMinutes: 1440
-      retentionInBytes: 52428800
+      retentionInMinutes: 9480
+      retentionInBytes: 524288000
   - name: searchqueries
     persisted: false
     configuration:
