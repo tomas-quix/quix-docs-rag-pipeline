@@ -318,6 +318,39 @@ deployments:
         description: ''
         required: false
         value: 384
+  - name: RAG Search UI 2
+    application: RAG Search UI
+    deploymentType: Service
+    version: latest
+    resources:
+      cpu: 1000
+      memory: 2000
+      replicas: 1
+    publicAccess:
+      enabled: true
+      urlPrefix: quixchatgpt
+    desiredStatus: Running
+    variables:
+      - name: OPENAI_API_KEY
+        inputType: Secret
+        description: To connect to GPT4 for LLM response.
+        required: true
+        secretKey: openai_apikey
+      - name: QDRANT_APIKEY
+        inputType: Secret
+        description: API for connecting to Qdrant
+        required: true
+        secretKey: qdrant_apikey
+      - name: collectionname
+        inputType: FreeText
+        description: ''
+        required: true
+        value: quixdocs_C1000_O200_2024-04-05-v10
+      - name: output
+        inputType: OutputTopic
+        description: ''
+        required: false
+        value: searchqueries
 
 # This section describes the Topics of the data pipeline
 topics:
