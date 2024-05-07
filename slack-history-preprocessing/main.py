@@ -42,7 +42,7 @@ def project_messages(row: dict):
             "user": row['user'],
             "thread_ts": row['thread_ts'],
             "event_ts": float(row['ts']),
-            "files": list(map(lambda row: row['id'], filter(lambda f: 'mimetype' in f and f['mimetype'] == 'text/plain', row['files']))) if 'files' in row else []
+            "file_ids": list(map(lambda row: row['id'], filter(lambda f: 'mimetype' in f and f['mimetype'] == 'text/plain', row['files']))) if 'files' in row else []
             
     }
     
