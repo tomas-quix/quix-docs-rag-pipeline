@@ -349,13 +349,6 @@ topics:
       replicationFactor: 2
       retentionInMinutes: 1440
       retentionInBytes: 52428800
-  - name: raw-text-chunks-2024-04-05-v2
-    persisted: false
-    configuration:
-      partitions: 1
-      replicationFactor: 2
-      retentionInMinutes: 1440
-      retentionInBytes: 52428800
   - name: embeddings-sbert-all-MiniLM-L6-2024-04-05-v2
     persisted: false
     configuration:
