@@ -77,7 +77,7 @@ deployments:
         inputType: OutputTopic
         description: This is the output topic for hello world data
         required: true
-        value: raw-text-chunks-2024-04-05-v2
+        value: raw-text-chunks
       - name: textchunksize
         inputType: FreeText
         description: 200
