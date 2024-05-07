@@ -42,7 +42,7 @@ def project_messages(row: dict):
             "user": row['user'],
             "thread_ts": row['thread_ts'],
             "event_ts": float(row['ts']),
-            "files": list(map(lambda row: row['id'], filter(lambda f: 'mimetype' in f and f['mimetype'] == 'text/plain', row['files']))) if 'files' in row else []
+            "file_ids": list(map(lambda row: row['id'], filter(lambda f: 'mimetype' in f and f['mimetype'] == 'text/plain', row['files']))) if 'files' in row else []
             
     }
     
@@ -55,11 +55,9 @@ def project_messages(row: dict):
 
 sdf = sdf.apply(project_messages)    
 
-#sdf = sdf.update(lambda row: print(row))
-sdf = sdf.filter(lambda row: len(row['files']) > 0)
 sdf = sdf.update(lambda row: print(json.dumps(row, indent=4)))
 
-#sdf = sdf.to_topic(output_topic, key=lambda row: f"{row['user']}-{row['thread_ts']}")
+sdf = sdf.to_topic(output_topic, key=lambda row: f"{row['user']}-{row['thread_ts']}")
 
 if __name__ == "__main__":
     app.run(sdf)

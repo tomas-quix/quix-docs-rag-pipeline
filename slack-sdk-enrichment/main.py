@@ -39,6 +39,10 @@ def download_files(row: dict):
         row['files'] = []
         for file in row['file_ids']:
             row['files'].append(download_file(file))
+
+    if 'replies' in row:
+        for reply in row['replies']:
+            download_files(reply)
             
 
 def lookup_users(row:dict, state: State):
