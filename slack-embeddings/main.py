@@ -20,13 +20,18 @@ def create_embeddings(row):
     text = f"At {datetime.datetime.fromtimestamp(row['event_ts'])}"
     text += f" in Slack channel {row['channel']}"
     text += f" user {row['user']} posted: {row['text']}"
+
+    for file in row['files']:
+        text += "\n" + file
     
     for reply in row['replies']:
         text += f"\nAt {datetime.datetime.fromtimestamp(reply['event_ts'])}"
         text += f" user {reply['user']} replied to that with text: {reply['text']}"
+
+        for file in reply['files']:
+            text += "\n" + file
         
-    for file in row['files']:
-        text += "\n" + file
+   
         
     embeddings = encoder.encode(text)
     embedding_list = embeddings.tolist() # Conversion step because SentenceTransformer outputs a numpy Array but Qdrant expects a plain list
