@@ -398,13 +398,6 @@ topics:
       replicationFactor: 2
       retentionInMinutes: -1
       retentionInBytes: 524288000
-  - name: slack-internal-aggregated-by-thread
-    persisted: false
-    configuration:
-      partitions: 1
-      replicationFactor: 2
-      retentionInMinutes: 1440
-      retentionInBytes: 52428800
   - name: slack-internal-grouped-by-thread
     persisted: false
     configuration:
