@@ -44,7 +44,7 @@ def create_embeddings(row):
     
     result_chunks = []
         
-    for text_chunk in text_chunks:
+    for i, text_chunk in enumerate(text_chunks):
         
         embeddings = encoder.encode(text_chunk)
         embedding_list = embeddings.tolist() # Conversion step because SentenceTransformer outputs a numpy Array but Qdrant expects a plain list
@@ -62,14 +62,16 @@ def create_embeddings(row):
                 'uuid': str(uuid.uuid5(namespace, id)),
                 'timestamp': str(datetime.datetime.fromtimestamp(row['event_ts'])),
                 'channel': row['channel'],
-                'author': row['user']
+                'author': row['user'],
+                'chunk_index': str(i),
+                'chunks_total': str(len(text_chunk))
             }
         })
         
     return result_chunks
 
 # Define your application and settings
-app = Application(consumer_group="slack-embeddings-v1.12",auto_offset_reset="earliest")
+app = Application(consumer_group="slack-embeddings-v1.13",auto_offset_reset="earliest")
 
 # Define an input topic with JSON deserializer
 input_topic = app.topic(os.environ['input'], value_deserializer="json")
@@ -91,6 +93,6 @@ sdf = sdf.apply(create_embeddings, expand=True)
 sdf["Timestamp"] = sdf.apply(lambda row: time.time_ns())
 
 # Publish the processed SDF to a Kafka topic specified by the output_topic object.
-sdf = sdf.to_topic(output_topic)
+sdf = sdf.to_topic(output_topic, key=lambda row: f"{row['id']}-{row["metadata"]["chunk_index"]}")
 
 app.run(sdf)
