@@ -8,8 +8,8 @@ metadata:
 deployments:
   - name: RAG Search UI
     application: RAG Search UI
-    deploymentType: Service
     version: latest
+    deploymentType: Service
     resources:
       cpu: 1000
       memory: 2000
@@ -41,8 +41,8 @@ deployments:
         value: searchqueries
   - name: Sink QUERY to DuckDB on MotherDuck
     application: Sink to DuckDB on MotherDuck
-    deploymentType: Service
     version: e70b87aae0bd12962a0db9236d658bc8bb13f7e6
+    deploymentType: Service
     resources:
       cpu: 500
       memory: 1000
@@ -66,8 +66,8 @@ deployments:
         value: quix-searches-1kchunks-02-04-1820
   - name: Crawl and extract text
     application: Crawl and extract text
-    deploymentType: Job
     version: latest
+    deploymentType: Job
     resources:
       cpu: 500
       memory: 1000
@@ -95,8 +95,8 @@ deployments:
         value: False
   - name: Create embeddings
     application: Create embeddings
-    deploymentType: Service
     version: latest
+    deploymentType: Service
     resources:
       cpu: 1000
       memory: 2000
@@ -120,8 +120,8 @@ deployments:
         value: embeddings-v3
   - name: Internal Slack Gateway
     application: slack-gateway
-    deploymentType: Service
     version: latest
+    deploymentType: Service
     resources:
       cpu: 200
       memory: 500
@@ -143,12 +143,15 @@ deployments:
         secretKey: slack_token
   - name: Aggregate by Thread
     application: slack-aggregate-threads
-    deploymentType: Service
     version: latest
+    deploymentType: Service
     resources:
       cpu: 200
       memory: 500
       replicas: 2
+    state:
+      enabled: true
+      size: 5
     desiredStatus: Running
     variables:
       - name: input
@@ -163,8 +166,8 @@ deployments:
         value: slack-aggregated-by-thread
   - name: Slack SDK Enrichment
     application: slack-sdk-enrichment
-    deploymentType: Service
     version: latest
+    deploymentType: Service
     resources:
       cpu: 200
       memory: 500
@@ -203,8 +206,8 @@ deployments:
         secretKey: redis_token
   - name: Slack internal batch load
     application: slack-history-batch-load
-    deploymentType: Job
     version: latest
+    deploymentType: Job
     resources:
       cpu: 200
       memory: 500
@@ -222,8 +225,8 @@ deployments:
         secretKey: slack_token
   - name: Slack history preprocessing
     application: slack-history-preprocessing
-    deploymentType: Service
     version: latest
+    deploymentType: Service
     resources:
       cpu: 200
       memory: 500
@@ -242,8 +245,8 @@ deployments:
         value: slack-aggregated-by-thread
   - name: Slack embeddings
     application: slack-embeddings
-    deploymentType: Service
     version: latest
+    deploymentType: Service
     resources:
       cpu: 1000
       memory: 2000
@@ -265,8 +268,8 @@ deployments:
         value: embeddings
   - name: Qdrant sink
     application: qdrant-sink
-    deploymentType: Service
     version: latest
+    deploymentType: Service
     resources:
       cpu: 1000
       memory: 1000
@@ -282,7 +285,7 @@ deployments:
         inputType: FreeText
         description: ''
         required: true
-        value: quixdocs_C1000_O200_2024-04-05-v10
+        value: quixdocs_C1000_O200_2024-04-05-v11
       - name: qdrant_apikey
         inputType: Secret
         description: ''
@@ -354,20 +357,6 @@ topics:
     persisted: false
     configuration:
       partitions: 4
-      replicationFactor: 2
-      retentionInMinutes: -1
-      retentionInBytes: 524288000
-  - name: repartition__slack-aggregate-threads-v3.0--slack-raw--thread-id
-    persisted: false
-    configuration:
-      partitions: 2
-      replicationFactor: 2
-      retentionInMinutes: -1
-      retentionInBytes: 524288000
-  - name: repartition__slack-aggregate-threads-v2.5--slack-raw--thread-id
-    persisted: false
-    configuration:
-      partitions: 2
       replicationFactor: 2
       retentionInMinutes: -1
       retentionInBytes: 524288000
