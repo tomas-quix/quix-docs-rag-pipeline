@@ -65,8 +65,8 @@ offsetlimit = 125
 #         app.stop()
 
 app = Application.Quix(
-    consumer_group="qdrant-ingestion-v6.5",
-    auto_offset_reset="earliest",
+    consumer_group="qdrant-ingestion-v6.6",
+    auto_offset_reset="latest",
 )
 
 # Define an input topic with JSON deserializer
