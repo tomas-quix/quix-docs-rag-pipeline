@@ -64,7 +64,7 @@ def create_embeddings(row):
                 'channel': row['channel'],
                 'author': row['user'],
                 'chunk_index': str(i),
-                'chunks_total': str(len(text_chunk))
+                'chunks_total': str(len(text_chunks))
             }
         })
         
@@ -93,6 +93,6 @@ sdf = sdf.apply(create_embeddings, expand=True)
 sdf["Timestamp"] = sdf.apply(lambda row: time.time_ns())
 
 # Publish the processed SDF to a Kafka topic specified by the output_topic object.
-sdf = sdf.to_topic(output_topic, key=lambda row: f"{row['id']}-{row["metadata"]["chunk_index"]}")
+sdf = sdf.to_topic(output_topic, key=lambda row: f"{row['doc_id']}-{row['metadata']['chunk_index']}")
 
 app.run(sdf)
