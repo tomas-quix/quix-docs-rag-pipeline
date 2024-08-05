@@ -25,7 +25,7 @@ def get_thread_key(row: dict):
 sdf = app.dataframe(input_topic)
 sdf = sdf.apply(lambda row: row["event"])
 sdf = sdf[sdf.contains("user")]
-sdf = sdf[(sdf["event_ts"] == '1721314022.468879') | ((sdf.contains("thread_ts")) & (sdf["thread_ts"] == '1721314022.468879') )]
+#sdf = sdf[(sdf["event_ts"] == '1721314022.468879') | ((sdf.contains("thread_ts")) & (sdf["thread_ts"] == '1721314022.468879') )]
 sdf = sdf.group_by(get_thread_key, name="thread-id")
 
 sdf = sdf.apply(lambda row: {
