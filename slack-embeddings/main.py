@@ -50,8 +50,6 @@ def create_embeddings(row):
         response = openai.embeddings.create(input=text_chunk, model="text-embedding-ada-002")
         embeddings = response.data[0].embedding
         
-        print(f'Created vector: "{embeddings}"')
-
         id = f"{bytes.decode(message_key())}"
 
         result_chunks.append({
@@ -84,15 +82,14 @@ output_topic = app.topic(os.environ['output'], value_serializer="json")
 # Initialize a streaming dataframe based on the stream of messages from the input topic:
 sdf = app.dataframe(topic=input_topic)
 
-sdf = sdf.update(lambda val: print(f"Received update: {val}"))
-
 sdf = sdf[sdf.contains("event_ts")]
+
+sdf = sdf.filter(lambda row: "subtype" not in row)
+
+sdf = sdf.update(print)
 
 # Trigger the embedding function for any new messages(rows) detected in the filtered SDF
 sdf = sdf.apply(create_embeddings, expand=True)
-
-# Update the timestamp column to the current time in nanosecondsc
-sdf["Timestamp"] = sdf.apply(lambda row: time.time_ns())
 
 # Publish the processed SDF to a Kafka topic specified by the output_topic object.
 sdf = sdf.to_topic(output_topic, key=lambda row: f"{row['doc_id']}-{row['metadata']['chunk_index']}")
