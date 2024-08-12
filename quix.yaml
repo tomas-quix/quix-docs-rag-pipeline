@@ -70,7 +70,7 @@ deployments:
     deploymentType: Job
     resources:
       cpu: 500
-      memory: 1000
+      memory: 4000
       replicas: 1
     variables:
       - name: output
@@ -278,7 +278,7 @@ deployments:
       cpu: 1000
       memory: 1000
       replicas: 4
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: input
         inputType: InputTopic
