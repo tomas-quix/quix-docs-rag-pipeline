@@ -71,7 +71,7 @@ def create_embeddings(row):
     return result_chunks
 
 # Define your application and settings
-app = Application(consumer_group="slack-embeddings-v1.15",auto_offset_reset="earliest")
+app = Application(consumer_group="slack-embeddings-v1.16",auto_offset_reset="earliest")
 
 # Define an input topic with JSON deserializer
 input_topic = app.topic(os.environ['input'], value_deserializer="json")
@@ -83,7 +83,7 @@ output_topic = app.topic(os.environ['output'], value_serializer="json")
 sdf = app.dataframe(topic=input_topic)
 
 sdf = sdf[sdf.contains("event_ts")]
-
+sdf = sdf[sdf.contains("type")]
 sdf = sdf.filter(lambda row: "subtype" not in row)
 
 sdf = sdf.update(print)
