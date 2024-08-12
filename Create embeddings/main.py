@@ -3,17 +3,20 @@ from quixstreams import State, message_key
 from sentence_transformers import SentenceTransformer
 import os
 import time
+import openai
 
-encoder = SentenceTransformer('all-MiniLM-L6-v2') # Model to create embeddings
+# Set your OpenAI API key
+openai.api_key = os.getenv('OPENAI_API_KEY')
 
 # Define the embedding function
 def create_embeddings(row):
     text = row['page_content']
-    embeddings = encoder.encode(text)
-    embedding_list = embeddings.tolist() # Conversion step because SentenceTransformer outputs a numpy Array but Qdrant expects a plain list
-    print(f'Created vector: "{embedding_list}"')
+    
+    response = openai.embeddings.create(input=text, model="text-embedding-3-large")
+    embeddings = response.data[0].embedding
+    print(f'Created vector: "{embeddings}"')
 
-    return embedding_list
+    return embeddings
 
 # Define your application and settings
 app = Application.Quix(
