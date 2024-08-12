@@ -118,6 +118,10 @@ deployments:
         description: ''
         required: false
         value: embeddings-v3
+      - name: OPENAI_API_KEY
+        inputType: Secret
+        required: true
+        secretKey: openai_apikey
   - name: Internal Slack Gateway
     application: slack-gateway
     version: latest
