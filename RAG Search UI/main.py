@@ -30,6 +30,8 @@ openai_apikey = os.environ['OPENAI_API_KEY']
 collection = os.environ['collectionname']
 #TEST COLLECTIONS: "quix-techdocs-no0_5b_1kchars" # "quix-techdocs-no0_5b"
 
+openai_apikey = os.environ['OPENAI_API_KEY']
+
 # Initialize OpenAI embeddings
 embeddings = OpenAIEmbeddings(openai_api_key=openai_apikey)  # Updated to use OpenAI embeddings
 
