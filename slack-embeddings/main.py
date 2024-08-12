@@ -47,7 +47,7 @@ def create_embeddings(row):
         
     for i, text_chunk in enumerate(text_chunks):
         
-        response = openai.embeddings.create(input=text_chunk, model="text-embedding-ada-002")
+        response = openai.embeddings.create(input=text_chunk, model="text-embedding-3-large")
         embeddings = response.data[0].embedding
         
         id = f"{bytes.decode(message_key())}"
@@ -71,7 +71,7 @@ def create_embeddings(row):
     return result_chunks
 
 # Define your application and settings
-app = Application(consumer_group="slack-embeddings-v1.14",auto_offset_reset="earliest")
+app = Application(consumer_group="slack-embeddings-v1.15",auto_offset_reset="earliest")
 
 # Define an input topic with JSON deserializer
 input_topic = app.topic(os.environ['input'], value_deserializer="json")
