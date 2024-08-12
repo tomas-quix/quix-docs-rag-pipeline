@@ -16,6 +16,10 @@ variables:
     description: ''
     defaultValue: embeddings-v2
     required: false
+  - name: OPENAI_API_KEY
+    inputType: Secret
+    defaultValue: OPENAI_API_KEY
+    required: true
 dockerfile: dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
