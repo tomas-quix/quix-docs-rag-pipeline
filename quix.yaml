@@ -251,7 +251,7 @@ deployments:
     state:
       enabled: true
       size: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: input
         inputType: InputTopic
@@ -361,6 +361,3 @@ topics:
       replicationFactor: 2
       retentionInMinutes: 1440
       retentionInBytes: 52428800
-  - name: slack-encriched
-    configuration:
-      partitions: 1
