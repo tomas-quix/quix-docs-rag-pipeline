@@ -17,11 +17,11 @@ deployments:
     publicAccess:
       enabled: true
       urlPrefix: ragsearchui-docs
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: OPENAI_API_KEY
         inputType: Secret
-        description: To connect to GPT4 for LLM response.
+        description: ''
         required: true
         secretKey: openai_apikey
       - name: QDRANT_APIKEY
