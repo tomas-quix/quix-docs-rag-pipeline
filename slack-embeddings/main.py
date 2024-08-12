@@ -71,7 +71,7 @@ def create_embeddings(row):
     return result_chunks
 
 # Define your application and settings
-app = Application(consumer_group="slack-embeddings-v1.15",auto_offset_reset="earliest")
+app = Application(consumer_group="slack-embeddings-v1.16",auto_offset_reset="earliest")
 
 # Define an input topic with JSON deserializer
 input_topic = app.topic(os.environ['input'], value_deserializer="json")
