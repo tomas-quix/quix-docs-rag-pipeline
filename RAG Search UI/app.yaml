@@ -21,6 +21,11 @@ variables:
     description: ''
     defaultValue: searchqueries
     required: false
+  - name: OPENAI_API_KEY
+    inputType: Secret
+    description: ''
+    defaultValue: openai_apikey
+    required: true
 dockerfile: dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
