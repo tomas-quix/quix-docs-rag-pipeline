@@ -33,7 +33,7 @@ collection = os.environ['collectionname']
 openai_apikey = os.environ['OPENAI_API_KEY']
 
 # Initialize OpenAI embeddings
-embeddings = OpenAIEmbeddings(openai_api_key=openai_apikey)  # Updated to use OpenAI embeddings
+embeddings = OpenAIEmbeddings(openai_api_key=openai_apikey, model="text-embedding-3-large")  # Updated to use OpenAI embeddings
 
 outputtopicname = os.environ["output"]
 
@@ -56,6 +56,8 @@ async def on_chat_start():
                     prefer_grpc=True
                 )
     # aclient = AsyncQdrantClient(path="./qdrant-db-buffer")
+    
+
 
     vectorstore = Qdrant(
         async_client=aclient,
@@ -63,7 +65,9 @@ async def on_chat_start():
         collection_name=collection,
         embeddings=embeddings,
     )
+    #docs_retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 20})
     docs_retriever = vectorstore.as_retriever()
+    
     message_history = ChatMessageHistory()
 
     memory = ConversationBufferMemory(
@@ -101,6 +105,9 @@ async def main(message: cl.Message):
         res = await chain.acall(message.content, callbacks=[cb]) # Call to lchain 
         answer = res["answer"]
         source_documents = res["source_documents"]  # type: List[Document]
+        
+        for doc in source_documents:
+            logger.info(f"Document: {doc.page_content}\nMetadata: {doc.metadata}")
 
         # Log the source documents to see if any have None as page_content
         logger.info(f"Source documents: {source_documents}")
