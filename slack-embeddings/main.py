@@ -1,15 +1,16 @@
 from quixstreams import Application, message_key
-from sentence_transformers import SentenceTransformer
 import os
 import time
 import datetime
 import uuid
+import openai
 
 # for local dev, load env vars from a .env file
 from dotenv import load_dotenv
 load_dotenv()
 
-encoder = SentenceTransformer('all-MiniLM-L6-v2') # Model to create embeddings
+# Set your OpenAI API key
+openai.api_key = os.getenv('OPENAI_API_KEY')
 
 # Define a namespace (can be any valid UUID)
 namespace = uuid.UUID('12345678-1234-5678-1234-567812345678')
@@ -46,15 +47,16 @@ def create_embeddings(row):
         
     for i, text_chunk in enumerate(text_chunks):
         
-        embeddings = encoder.encode(text_chunk)
-        embedding_list = embeddings.tolist() # Conversion step because SentenceTransformer outputs a numpy Array but Qdrant expects a plain list
-        print(f'Created vector: "{embedding_list}"')
+        response = openai.embeddings.create(input=text_chunk, model="text-embedding-ada-002")
+        embeddings = response.data[0].embedding
+        
+        print(f'Created vector: "{embeddings}"')
 
         id = f"{bytes.decode(message_key())}"
 
         result_chunks.append({
             'page_content': text_chunk,
-            'embeddings': embedding_list,
+            'embeddings': embeddings,
             'doc_id': id,
             'metadata': {
                 'title': row['text'],
@@ -71,7 +73,7 @@ def create_embeddings(row):
     return result_chunks
 
 # Define your application and settings
-app = Application(consumer_group="slack-embeddings-v1.13",auto_offset_reset="earliest")
+app = Application(consumer_group="slack-embeddings-v1.14",auto_offset_reset="earliest")
 
 # Define an input topic with JSON deserializer
 input_topic = app.topic(os.environ['input'], value_deserializer="json")
