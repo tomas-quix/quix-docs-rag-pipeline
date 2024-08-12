@@ -304,7 +304,7 @@ deployments:
         inputType: FreeText
         description: ''
         required: false
-        value: 1536
+        value: 3072
 
 # This section describes the Topics of the data pipeline
 topics:
