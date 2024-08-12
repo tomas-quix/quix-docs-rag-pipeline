@@ -7,11 +7,11 @@ from langchain_community.vectorstores import Qdrant
 from langchain.chains import (
     ConversationalRetrievalChain,
 )
-from langchain.chat_models import ChatOpenAI
+from langchain_community.chat_models import ChatOpenAI
 
 from langchain.docstore.document import Document
 from langchain.memory import ChatMessageHistory, ConversationBufferMemory
-from langchain.embeddings import OpenAIEmbeddings  # Updated import for OpenAI embeddings
+from langchain_openai import OpenAIEmbeddings  # Updated import for OpenAI embeddings
 
 from qdrant_client import QdrantClient, AsyncQdrantClient
 from quixstreams import Application
