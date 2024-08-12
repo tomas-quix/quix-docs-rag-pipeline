@@ -1,6 +1,4 @@
 from quixstreams import Application 
-from quixstreams import State, message_key
-from sentence_transformers import SentenceTransformer
 import os
 import time
 import openai
