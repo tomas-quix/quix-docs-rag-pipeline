@@ -11,9 +11,7 @@ from langchain.chat_models import ChatOpenAI
 
 from langchain.docstore.document import Document
 from langchain.memory import ChatMessageHistory, ConversationBufferMemory
-from langchain_community.embeddings.sentence_transformer import (
-    SentenceTransformerEmbeddings,
-)
+from langchain.embeddings import OpenAIEmbeddings  # Updated import for OpenAI embeddings
 
 from qdrant_client import QdrantClient, AsyncQdrantClient
 from quixstreams import Application
@@ -31,7 +29,10 @@ logger = logging.getLogger(__name__)
 openai_apikey = os.environ['OPENAI_API_KEY']
 collection = os.environ['collectionname']
 #TEST COLLECTIONS: "quix-techdocs-no0_5b_1kchars" # "quix-techdocs-no0_5b"
-embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
+
+# Initialize OpenAI embeddings
+embeddings = OpenAIEmbeddings(openai_api_key=openai_apikey)  # Updated to use OpenAI embeddings
+
 outputtopicname = os.environ["output"]
 
 @cl.on_chat_start
