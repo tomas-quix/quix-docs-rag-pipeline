@@ -1,0 +1,24 @@
+# Use a specific tag of the base image for consistent environments
+FROM python:3.11.1-slim-buster
+
+# Set multiple environment variables at once to reduce layer count
+ENV DEBIAN_FRONTEND="noninteractive" \
+    PYTHONUNBUFFERED=1 \
+    PYTHONIOENCODING=UTF-8
+
+# Set the working directory
+WORKDIR /app
+
+# Copy just the requirements file(s) first to leverage Docker cache
+# Assuming requirements.txt is at the root of your project directory
+COPY requirements.txt .
+
+RUN python3 -m pip install --upgrade pip
+
+# Install dependencies
+RUN python3 -m pip install -r requirements.txt --verbose
+# Copy the rest of the application files to the image
+COPY . .
+
+# Set the default command for the container
+ENTRYPOINT ["chainlit", "run", "main.py", "--port", "80", "--host", "0.0.0.0"]

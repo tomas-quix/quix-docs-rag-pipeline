@@ -1,0 +1,9 @@
+
+venv/
+
+
+**/certificates/
+
+**/.env
+
+**/state/

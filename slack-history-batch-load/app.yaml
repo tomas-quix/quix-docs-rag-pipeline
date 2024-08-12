@@ -1,0 +1,16 @@
+name: slack-history-batch-load
+language: python
+variables:
+  - name: output
+    inputType: OutputTopic
+    description: Name of the output topic to write into
+    defaultValue: slack-raw-history
+    required: true
+  - name: slack_token
+    inputType: Secret
+    description: ''
+    defaultValue: slack_token
+    required: true
+dockerfile: dockerfile
+runEntryPoint: main.py
+defaultFile: main.py

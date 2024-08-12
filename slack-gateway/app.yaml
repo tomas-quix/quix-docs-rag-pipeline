@@ -1,0 +1,16 @@
+name: Slack Gateway
+language: python
+variables:
+  - name: output
+    inputType: OutputTopic
+    description: This is the output topic for hello world data
+    defaultValue: slack-raw
+    required: true
+  - name: slack_token
+    inputType: Secret
+    description: ''
+    defaultValue: slack_token
+    required: false
+dockerfile: build/dockerfile
+runEntryPoint: main.py
+defaultFile: main.py

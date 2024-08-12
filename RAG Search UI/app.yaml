@@ -1,0 +1,31 @@
+name: RAG Search UI
+language: python
+variables:
+  - name: OPENAI_API_KEY
+    inputType: Secret
+    description: To connect to GPT4 for LLM response.
+    defaultValue: openai_apikey
+    required: true
+  - name: QDRANT_APIKEY
+    inputType: Secret
+    description: API for connecting to Qdrant
+    defaultValue: qdrant_apikey
+    required: true
+  - name: collectionname
+    inputType: FreeText
+    description: ''
+    defaultValue: quixdocs_C1000_O200_2024-04-05-v2
+    required: true
+  - name: output
+    inputType: OutputTopic
+    description: ''
+    defaultValue: searchqueries
+    required: false
+  - name: OPENAI_API_KEY
+    inputType: Secret
+    description: ''
+    defaultValue: openai_apikey
+    required: true
+dockerfile: dockerfile
+runEntryPoint: main.py
+defaultFile: main.py

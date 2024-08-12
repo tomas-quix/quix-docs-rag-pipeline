@@ -1,0 +1,9 @@
+quixstreams<2.5
+python-dotenv==1.0.1
+chainlit==1.0.505
+langchain==0.1.13
+langchain_community==0.0.29
+qdrant-client==1.9.0
+openai==1.23.6
+langchain-openai
+langchain-community

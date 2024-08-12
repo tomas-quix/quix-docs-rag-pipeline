@@ -1,0 +1,384 @@
+# Quix Project Descriptor
+# This file describes the data pipeline and configuration of resources of a Quix Project.
+
+metadata:
+  version: 1.0
+
+# This section describes the Deployments of the data pipeline
+deployments:
+  - name: RAG Search UI
+    application: RAG Search UI
+    version: latest
+    deploymentType: Service
+    resources:
+      cpu: 1000
+      memory: 2000
+      replicas: 1
+    publicAccess:
+      enabled: true
+      urlPrefix: ragsearchui-docs
+    desiredStatus: Running
+    variables:
+      - name: OPENAI_API_KEY
+        inputType: Secret
+        description: ''
+        required: true
+        secretKey: openai_apikey
+      - name: QDRANT_APIKEY
+        inputType: Secret
+        description: API for connecting to Qdrant
+        required: true
+        secretKey: qdrant_apikey
+      - name: collectionname
+        inputType: FreeText
+        description: ''
+        required: true
+        value: quixdocs_openai_v1.3
+      - name: output
+        inputType: OutputTopic
+        description: ''
+        required: false
+        value: searchqueries
+  - name: Sink QUERY to DuckDB on MotherDuck
+    application: Sink to DuckDB on MotherDuck
+    version: e70b87aae0bd12962a0db9236d658bc8bb13f7e6
+    deploymentType: Service
+    resources:
+      cpu: 500
+      memory: 1000
+      replicas: 1
+    desiredStatus: Stopped
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: This is the input topic for demo data
+        required: true
+        value: searchqueries
+      - name: motherduck_token
+        inputType: Secret
+        description: ''
+        required: false
+        secretKey: motherduck_token
+      - name: tablename
+        inputType: FreeText
+        description: ''
+        required: false
+        value: quix-searches-1kchunks-02-04-1820
+  - name: Crawl and extract text
+    application: Crawl and extract text
+    version: latest
+    deploymentType: Job
+    resources:
+      cpu: 500
+      memory: 4000
+      replicas: 1
+    variables:
+      - name: output
+        inputType: OutputTopic
+        description: This is the output topic for hello world data
+        required: true
+        value: raw-text-chunks
+      - name: textchunksize
+        inputType: FreeText
+        description: 200
+        required: false
+        value: 1000
+      - name: textoverlapsize
+        inputType: FreeText
+        description: ''
+        required: false
+        value: 200
+      - name: use_local_crawl_pickle
+        inputType: FreeText
+        description: ''
+        required: false
+        value: False
+  - name: Create embeddings
+    application: Create embeddings
+    version: latest
+    deploymentType: Service
+    resources:
+      cpu: 1000
+      memory: 2000
+      replicas: 4
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: Name of the input topic to listen to.
+        required: false
+        value: raw-text-chunks
+      - name: output
+        inputType: OutputTopic
+        description: Name of the output topic to write to.
+        required: false
+        value: embeddings
+      - name: consumergroup
+        inputType: FreeText
+        description: ''
+        required: false
+        value: embeddings-v3
+      - name: OPENAI_API_KEY
+        inputType: Secret
+        required: true
+        secretKey: openai_apikey
+  - name: Internal Slack Gateway
+    application: slack-gateway
+    version: latest
+    deploymentType: Service
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    publicAccess:
+      enabled: true
+      urlPrefix: internal-slack-gateway
+    desiredStatus: Running
+    variables:
+      - name: output
+        inputType: OutputTopic
+        description: This is the output topic for hello world data
+        required: true
+        value: slack-raw
+      - name: slack_token
+        inputType: Secret
+        description: ''
+        required: false
+        secretKey: slack_token
+  - name: Aggregate by Thread
+    application: slack-aggregate-threads
+    version: latest
+    deploymentType: Service
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 2
+    state:
+      enabled: true
+      size: 5
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: Name of the input topic to listen to.
+        required: false
+        value: slack-raw
+      - name: output
+        inputType: OutputTopic
+        description: Name of the output topic to write to.
+        required: false
+        value: slack-aggregated-by-thread
+  - name: Slack SDK Enrichment
+    application: slack-sdk-enrichment
+    version: latest
+    deploymentType: Service
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: Name of the input topic to listen to.
+        required: false
+        value: slack-aggregated-by-thread
+      - name: output
+        inputType: OutputTopic
+        description: Name of the output topic to write to.
+        required: false
+        value: slack-enriched
+      - name: slack_token
+        inputType: Secret
+        description: ''
+        required: true
+        secretKey: slack_token
+      - name: redis_host
+        inputType: FreeText
+        description: ''
+        required: true
+        value: redis-16017.c251.east-us-mz.azure.redns.redis-cloud.com
+      - name: redis_port
+        inputType: FreeText
+        description: ''
+        required: true
+        value: 16017
+      - name: redis_password
+        inputType: Secret
+        description: ''
+        required: true
+        secretKey: redis_token
+  - name: Slack internal batch load
+    application: slack-history-batch-load
+    version: latest
+    deploymentType: Job
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    variables:
+      - name: output
+        inputType: OutputTopic
+        description: Name of the output topic to write into
+        required: true
+        value: slack-raw-history
+      - name: slack_token
+        inputType: Secret
+        description: ''
+        required: true
+        secretKey: slack_token
+  - name: Slack history preprocessing
+    application: slack-history-preprocessing
+    version: latest
+    deploymentType: Service
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: Name of the input topic to listen to.
+        required: false
+        value: slack-raw-history
+      - name: output
+        inputType: OutputTopic
+        description: Name of the output topic to write to.
+        required: false
+        value: slack-aggregated-by-thread
+  - name: Slack embeddings
+    application: slack-embeddings
+    version: latest
+    deploymentType: Service
+    resources:
+      cpu: 1000
+      memory: 2000
+      replicas: 4
+    state:
+      enabled: true
+      size: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: Name of the input topic to listen to.
+        required: false
+        value: slack-enriched
+      - name: output
+        inputType: OutputTopic
+        description: Name of the output topic to write to.
+        required: false
+        value: embeddings
+      - name: OPENAI_API_KEY
+        inputType: Secret
+        required: true
+        secretKey: openai_apikey
+  - name: Qdrant sink
+    application: qdrant-sink
+    version: latest
+    deploymentType: Service
+    resources:
+      cpu: 1000
+      memory: 1000
+      replicas: 4
+    desiredStatus: Stopped
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: This is the input topic for demo data
+        required: true
+        value: embeddings
+      - name: collectionname
+        inputType: FreeText
+        description: ''
+        required: true
+        value: quixdocs_openai_v1.3
+      - name: qdrant_apikey
+        inputType: Secret
+        description: ''
+        required: true
+        secretKey: qdrant_apikey
+      - name: createcollection
+        inputType: FreeText
+        description: ''
+        required: false
+        value: True
+      - name: vector_size
+        inputType: FreeText
+        description: ''
+        required: false
+        value: 3072
+
+# This section describes the Topics of the data pipeline
+topics:
+  - name: raw-text-chunks
+    persisted: false
+    configuration:
+      partitions: 1
+      replicationFactor: 2
+      retentionInMinutes: 9480
+      retentionInBytes: 524288000
+  - name: searchqueries
+    persisted: false
+    configuration:
+      partitions: 1
+      replicationFactor: 2
+      retentionInMinutes: -1
+      retentionInBytes: 524288000
+  - name: slack-raw
+    persisted: false
+    configuration:
+      partitions: 2
+      replicationFactor: 2
+      retentionInMinutes: -1
+      retentionInBytes: 524288000
+  - name: slack-raw-history
+    persisted: false
+    configuration:
+      partitions: 1
+      replicationFactor: 2
+      retentionInMinutes: -1
+      retentionInBytes: 524288000
+  - name: embeddings
+    persisted: false
+    configuration:
+      partitions: 8
+      replicationFactor: 2
+      retentionInMinutes: -1
+      retentionInBytes: 524288000
+  - name: slack-enriched
+    persisted: false
+    configuration:
+      partitions: 8
+      replicationFactor: 2
+      retentionInMinutes: -1
+      retentionInBytes: 524288000
+  - name: slack-grouped-by-thread
+    persisted: false
+    configuration:
+      partitions: 4
+      replicationFactor: 2
+      retentionInMinutes: -1
+      retentionInBytes: 524288000
+  - name: slack-aggregated-by-thread
+    persisted: false
+    configuration:
+      partitions: 4
+      replicationFactor: 2
+      retentionInMinutes: -1
+      retentionInBytes: 524288000
+  - name: f1-data
+    persisted: false
+    configuration:
+      partitions: 1
+      replicationFactor: 2
+      retentionInMinutes: 1440
+      retentionInBytes: 52428800
+  - name: transform
+    persisted: false
+    configuration:
+      partitions: 1
+      replicationFactor: 2
+      retentionInMinutes: 1440
+      retentionInBytes: 52428800
