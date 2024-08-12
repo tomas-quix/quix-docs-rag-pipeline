@@ -65,7 +65,7 @@ offsetlimit = 125
 #         app.stop()
 
 app = Application.Quix(
-    consumer_group="qdrant-ingestion-v6.6",
+    consumer_group="qdrant-ingestion-v6.7",
     auto_offset_reset="latest",
 )
 
@@ -76,6 +76,7 @@ input_topic = app.topic(os.environ['input']) # Merlin.. i updated this for you
 sdf = app.dataframe(topic=input_topic)
 
 sdf = sdf[sdf['metadata'].contains('uuid')]
+sdf = sdf.filter(lambda row: len(row["embeddings"] == int(os.environ["vector_size"]))
 
 # INGESTION HAPPENS HERE
 ### Trigger the embedding function for any new messages(rows) detected in the filtered SDF
