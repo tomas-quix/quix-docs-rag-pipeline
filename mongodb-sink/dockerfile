@@ -1,7 +1,4 @@
-FROM python:3.12-rc-buster
-
-# Install necessary packages and dependencies
-RUN apt-get update && apt-get install -y build-essential libssl-dev
+FROM python:3.11.1-slim-buster
 
 # Set environment variables to non-interactive and unbuffered output
 ENV DEBIAN_FRONTEND=noninteractive \
