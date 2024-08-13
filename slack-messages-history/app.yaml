@@ -1,0 +1,22 @@
+name: slack-messages-history
+language: Python
+variables:
+  - name: URI
+    inputType: Secret
+    defaultValue: URI-key
+    required: false
+  - name: COLLECTION_NAME
+    inputType: FreeText
+    defaultValue: slack_community
+    required: false
+  - name: DATABASE_NAME
+    inputType: FreeText
+    defaultValue: SlackCommunity
+    required: false
+  - name: output
+    inputType: OutputTopic
+    defaultValue: f1-data
+    required: false
+dockerfile: dockerfile
+runEntryPoint: main.py
+defaultFile: main.py
