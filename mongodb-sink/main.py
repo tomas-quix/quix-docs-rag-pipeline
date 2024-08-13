@@ -9,6 +9,7 @@ load_dotenv()
 
 from mongo_db_sink import MongoDBSink
 
+
 mongodb_sink = MongoDBSink(
     uri=os.environ["URI"],
     database_name=os.environ["DATABASE_NAME"],
