@@ -36,7 +36,7 @@ class MongoDBSink(BatchingSink):
         
     def connect(self):
         try:
-            self.client = MongoClient(self.uri, ssl=True, ssl_cert_reqs=ssl.CERT_NONE)
+            self.client = MongoClient(self.uri)
             self.db = self.client[self.database_name]
             self.collection = self.db[self.collection_name]
             
