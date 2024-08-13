@@ -9,10 +9,6 @@ variables:
     inputType: Secret
     defaultValue: URI-key
     required: false
-  - name: DATASET_ID
-    inputType: FreeText
-    defaultValue: community-slack
-    required: false
   - name: DATASET_LOCATION
     inputType: FreeText
     defaultValue: europe-west3
