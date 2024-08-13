@@ -9,10 +9,6 @@ variables:
     inputType: Secret
     defaultValue: URI-key
     required: false
-  - name: TABLE_NAME
-    inputType: FreeText
-    defaultValue: threads
-    required: false
   - name: CONSUMER_GROUP
     inputType: FreeText
     defaultValue: big-query-sink-v1
