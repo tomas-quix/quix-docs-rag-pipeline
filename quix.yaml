@@ -326,22 +326,6 @@ deployments:
         inputType: Secret
         required: false
         secretKey: mongodb_uri
-      - name: PROJECT_ID
-        inputType: FreeText
-        required: false
-        value: portalanalytics-391408
-      - name: DATASET_ID
-        inputType: FreeText
-        required: false
-        value: community-slack
-      - name: DATASET_LOCATION
-        inputType: FreeText
-        required: false
-        value: europe-west3
-      - name: TABLE_NAME
-        inputType: FreeText
-        required: false
-        value: threads-dev
       - name: CONSUMER_GROUP
         inputType: FreeText
         required: false
@@ -353,7 +337,7 @@ deployments:
       - name: COLLECTION_NAME
         inputType: FreeText
         required: false
-        value: slack_community
+        value: slack_community_dev
       - name: DATABASE_NAME
         inputType: FreeText
         required: false
