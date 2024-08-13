@@ -4,7 +4,6 @@ from logging import Logger
 import time
 
 from pymongo import MongoClient, ASCENDING, errors
-import ssl
 from quixstreams.sinks import SinkBatch
 from quixstreams.sinks import BatchingSink
 
