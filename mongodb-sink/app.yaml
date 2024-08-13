@@ -9,10 +9,6 @@ variables:
     inputType: Secret
     defaultValue: URI-key
     required: false
-  - name: PROJECT_ID
-    inputType: FreeText
-    defaultValue: portalanalytics-391408
-    required: false
   - name: DATASET_ID
     inputType: FreeText
     defaultValue: community-slack
