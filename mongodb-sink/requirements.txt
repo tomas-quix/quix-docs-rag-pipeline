@@ -2,4 +2,4 @@
 quixstreams==2.9.0a
 google-cloud-bigquery
 python-dotenv
-pymongo[srv]
+pymongo
