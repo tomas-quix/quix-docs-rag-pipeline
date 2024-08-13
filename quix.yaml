@@ -329,7 +329,7 @@ deployments:
       - name: CONSUMER_GROUP
         inputType: FreeText
         required: false
-        value: mongodb-sink-v1
+        value: mongodb-sink-v1.1
       - name: MAX_QUEUE_SIZE
         inputType: FreeText
         required: false
