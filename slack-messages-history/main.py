@@ -28,16 +28,16 @@ collection = db.get_collection(collection_name)
 @app.route('/', methods=['GET', 'POST'])
 def index():
     query = {}
-    sort_field = '_id'
-    sort_order = 1  # 1 for ascending, -1 for descending
+    sort_field = 'timestamp'
+    sort_order = -1  # 1 for ascending, -1 for descending
     limit = int(request.form.get('limit', 50))
 
     if request.method == 'POST':
         # Get filter and sorting parameters from the form
         field_name = request.form.get('field_name')
         field_value = request.form.get('field_value')
-        sort_field = request.form.get('sort_field', '_id')
-        sort_order = int(request.form.get('sort_order', 1))
+        sort_field = request.form.get('sort_field', 'timestamp')
+        sort_order = int(request.form.get('sort_order', -1))
         
         if field_name and field_value:
             query = {field_name: field_value}
