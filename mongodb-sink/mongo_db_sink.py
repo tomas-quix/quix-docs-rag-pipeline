@@ -62,7 +62,7 @@ class MongoDBSink(BatchingSink):
             result_row = {
                 **row.value,
                 "timestamp": timestamp,
-                "_id": str(row.key)
+                "_id": str(bytes.decode(row.key))
             }
             
             all_rows.append(result_row)
