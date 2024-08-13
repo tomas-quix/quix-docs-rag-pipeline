@@ -366,10 +366,6 @@ deployments:
         inputType: FreeText
         required: false
         value: SlackCommunity
-      - name: output
-        inputType: OutputTopic
-        required: false
-        value: f1-data
 
 # This section describes the Topics of the data pipeline
 topics:
