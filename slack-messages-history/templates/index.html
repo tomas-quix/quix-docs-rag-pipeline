@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slack Thread Visualization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        .thread {
+            border: 1px solid #333;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #1e1e1e;
+            margin-bottom: 20px;
+        }
+        .header {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .message {
+            margin-bottom: 10px;
+        }
+        .timestamp {
+            font-size: 0.85em;
+            color: #888;
+        }
+        .reply {
+            border-left: 3px solid #333;
+            padding-left: 15px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        .username {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .channel {
+            font-size: 0.85em;
+            color: #BBB;
+            margin-bottom: 5px;
+        }
+        .team {
+            font-size: 0.85em;
+            color: #BBB;
+        }
+        select, input[type="text"], input[type="number"], button {
+            background-color: #333;
+            color: #e0e0e0;
+            border: 1px solid #555;
+            padding: 5px;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        button {
+            cursor: pointer;
+        }
+        .form-row {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Query Quix Community Slack public channels</h1>
+    <form method="POST">
+        <div class="form-row">
+            <label for="field_name">Field Name:</label>
+            <select id="field_name" name="field_name">
+                <option value="user" {% if request.form.get('field_name') == 'user' %}selected{% endif %}>User</option>
+                <option value="channel" {% if request.form.get('field_name') == 'channel' %}selected{% endif %}>Channel</option>
+                <option value="team" {% if request.form.get('field_name') == 'team' %}selected{% endif %}>Team</option>
+            </select>
+
+            <label for="field_value">Field Value:</label>
+            <input type="text" id="field_value" name="field_value" value="{{ request.form.get('field_value', '') }}">
+        </div>
+
+        <div class="form-row">
+            <label for="limit">Number of Documents:</label>
+            <input type="number" id="limit" name="limit" value="{{ request.form.get('limit', 50) }}" min="1">
+        </div>
+
+        <div class="form-row">
+            <label for="sort_field">Sort Field:</label>
+            <select id="sort_field" name="sort_field">
+                <option value="timestamp" {% if request.form.get('sort_field') == 'timestamp' %}selected{% endif %}>Timestamp</option>
+                <option value="user" {% if request.form.get('sort_field') == 'user' %}selected{% endif %}>User</option>
+            </select>
+
+            <label for="sort_order">Sort Order:</label>
+            <select id="sort_order" name="sort_order">
+                <option value="1" {% if request.form.get('sort_order') == '1' %}selected{% endif %}>Ascending</option>
+                <option value="-1" {% if request.form.get('sort_order') == '-1' or request.form.get('sort_order') is none %}selected{% endif %}>Descending</option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <button type="submit">Query</button>
+        </div>
+    </form>
+
+    <h2>Results:</h2>
+
+    {% for result in results %}
+    <div class="thread">
+        <div class="header">
+            <span class="username">{{ result.user }}</span> in <span class="channel">#{{ result.channel }}</span>
+            <div class="timestamp">{{ result.timestamp }}</div>
+        </div>
+        <div class="message">
+            {{ result.text }}
+        </div>
+
+        {% if result.replies %}
+        <div class="replies">
+            {% for reply in result.replies %}
+            <div class="reply">
+                <div class="header">
+                    <span class="username">{{ reply.user }}</span> replied
+                    <div class="timestamp">{{ reply.ts }}</div>
+                </div>
+                <div class="message">
+                    {{ reply.text }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <div class="team">
+            Team: {{ result.team }}
+        </div>
+    </div>
+    {% endfor %}
+
+</body>
+</html>
