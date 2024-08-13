@@ -59,10 +59,13 @@ class MongoDBSink(BatchingSink):
 
             last_timestamp = row.timestamp
                 
-            row["timestamp"] = timestamp
-            row["__key"] = str(row.key)
+            result_row = {
+                **row.value,
+                "timestamp": timestamp,
+                "__key": str(row.key)
+            }
             
-            all_rows.append(row)
+            all_rows.append(result_row)
     
         self._insert_row(all_rows)
         
