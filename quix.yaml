@@ -342,6 +342,34 @@ deployments:
         inputType: FreeText
         required: false
         value: SlackCommunity
+  - name: slack-messages-history
+    application: slack-messages-history
+    version: latest
+    deploymentType: Service
+    resources:
+      cpu: 1000
+      memory: 500
+      replicas: 1
+    publicAccess:
+      enabled: true
+      urlPrefix: slack-messages-history
+    variables:
+      - name: URI
+        inputType: Secret
+        required: false
+        secretKey: mongodb_uri
+      - name: COLLECTION_NAME
+        inputType: FreeText
+        required: false
+        value: slack_community
+      - name: DATABASE_NAME
+        inputType: FreeText
+        required: false
+        value: SlackCommunity
+      - name: output
+        inputType: OutputTopic
+        required: false
+        value: f1-data
 
 # This section describes the Topics of the data pipeline
 topics:
