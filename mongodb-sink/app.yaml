@@ -9,10 +9,6 @@ variables:
     inputType: Secret
     defaultValue: URI-key
     required: false
-  - name: DATASET_LOCATION
-    inputType: FreeText
-    defaultValue: europe-west3
-    required: false
   - name: TABLE_NAME
     inputType: FreeText
     defaultValue: threads
