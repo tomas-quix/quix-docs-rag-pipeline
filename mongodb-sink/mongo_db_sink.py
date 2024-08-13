@@ -4,6 +4,7 @@ from logging import Logger
 import time
 
 from pymongo import MongoClient, ASCENDING, errors
+import ssl
 from quixstreams.sinks import SinkBatch
 from quixstreams.sinks import BatchingSink
 
@@ -35,7 +36,7 @@ class MongoDBSink(BatchingSink):
         
     def connect(self):
         try:
-            self.client = MongoClient(self.uri)
+            self.client = MongoClient(self.uri, ssl=True, ssl_cert_reqs=ssl.CERT_NONE)
             self.db = self.client[self.database_name]
             self.collection = self.db[self.collection_name]
             
