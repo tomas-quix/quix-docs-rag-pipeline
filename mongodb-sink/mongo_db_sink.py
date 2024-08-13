@@ -3,7 +3,7 @@ import logging
 from logging import Logger
 import time
 
-from pymongo import MongoClient, ASCENDING, errors
+from pymongo import MongoClient, ASCENDING, errors, ReplaceOne
 from quixstreams.sinks import SinkBatch
 from quixstreams.sinks import BatchingSink
 
@@ -62,7 +62,7 @@ class MongoDBSink(BatchingSink):
             result_row = {
                 **row.value,
                 "timestamp": timestamp,
-                "__key": str(row.key)
+                "_id": str(row.key)
             }
             
             all_rows.append(result_row)
@@ -75,12 +75,16 @@ class MongoDBSink(BatchingSink):
     def _create_indexes(self):
         # Create indexes for timestamp and key fields for faster querying
         self.collection.create_index([("timestamp", ASCENDING)])
-        self.collection.create_index([("__key", ASCENDING)])
 
     def _insert_row(self, rows: list):
         try:
-            result = self.collection.insert_many(rows)
-            self.logger.debug(f"Inserted {len(result.inserted_ids)} rows into MongoDB.")
+            # Create a list of ReplaceOne operations
+            operations = [ReplaceOne({"_id": doc["_id"]}, doc, upsert=True) for doc in rows]
+
+            # Execute the bulk operation
+            result = self.collection.bulk_write(operations)
+            self.logger.debug(f"Inserted {result.upserted_count} rows into MongoDB.")
+            self.logger.debug(f"Updated {result.modified_count} rows in MongoDB.")
         except errors.BulkWriteError as e:
             self.logger.error(f"Encountered errors while inserting rows: {e.details}")
             raise
