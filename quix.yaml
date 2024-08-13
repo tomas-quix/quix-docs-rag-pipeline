@@ -337,7 +337,7 @@ deployments:
       - name: COLLECTION_NAME
         inputType: FreeText
         required: false
-        value: slack_community_dev
+        value: {{mongodb_collection_name}}
       - name: DATABASE_NAME
         inputType: FreeText
         required: false
