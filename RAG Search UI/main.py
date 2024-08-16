@@ -65,8 +65,8 @@ async def on_chat_start():
         collection_name=collection,
         embeddings=embeddings,
     )
-    #docs_retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 20})
-    docs_retriever = vectorstore.as_retriever()
+    docs_retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 20})
+    #docs_retriever = vectorstore.as_retriever()
     
     message_history = ChatMessageHistory()
 
