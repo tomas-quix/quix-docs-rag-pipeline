@@ -430,3 +430,7 @@ topics:
       retentionInMinutes: 1440
       retentionInBytes: 52428800
   - name: aggregates-1s
+  - name: prod_kafka
+    configuration:
+      partitions: 1
+      replicationFactor: 1
