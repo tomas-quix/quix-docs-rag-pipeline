@@ -434,3 +434,4 @@ topics:
     configuration:
       partitions: 1
       replicationFactor: 1
+  - name: slack-raw-2
