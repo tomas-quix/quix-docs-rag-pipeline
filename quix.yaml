@@ -431,3 +431,10 @@ topics:
       retentionInBytes: 52428800
   - name: aggregates-1s
   - name: slack-raw-2
+  - name: prod_kafka
+    configuration:
+      partitions: 2
+      replicationFactor: 2
+      retentionInMinutes: -1
+      retentionInBytes: 524288000
+      cleanupPolicy: Delete
