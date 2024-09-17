@@ -98,9 +98,6 @@ answer = ""
 source_documents = []
 text_elements = ""
 
-# Example summarization pipeline using Hugging Face transformers
-summarizer = pipeline("summarization")
-
 encoding = tiktoken.encoding_for_model("gpt-4") 
 
 # Function to modify documents
