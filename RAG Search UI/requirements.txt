@@ -7,5 +7,3 @@ qdrant-client==1.9.0
 openai==1.23.6
 langchain-openai
 langchain-community
-transformers
-tf-keras
