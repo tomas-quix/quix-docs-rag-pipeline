@@ -10,7 +10,6 @@ from langchain.chains import (
 import openai
 import tiktoken
 import json
-from transformers import pipeline
 
 from langchain_community.chat_models import ChatOpenAI
 
