@@ -8,3 +8,4 @@ openai==1.23.6
 langchain-openai
 langchain-community
 transformers
+tensorflow==2.17.0
