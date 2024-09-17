@@ -101,16 +101,16 @@ text_elements = ""
 encoding = tiktoken.encoding_for_model("gpt-4") 
 
 # Function to modify documents
-def modify_documents(documents):
-    modified_documents = []
-    for doc in documents:
-        print(doc.metadata)
+#def modify_documents(documents):
+    #modified_documents = []
+    #for doc in documents:
+        #print(doc.metadata)
         # Example modification: Summarize the document content
-        summarized_content = summarizer(doc.page_content, max_length=150, min_length=50, do_sample=False)
+        #summarized_content = summarizer(doc.page_content, max_length=150, min_length=50, do_sample=False)
         # Create a new Document with the summarized content
-        modified_doc = Document(page_content=summarized_content[0]['summary_text'], metadata=doc.metadata)
-        modified_documents.append(modified_doc)
-    return modified_documents
+        #modified_doc = Document(page_content=summarized_content[0]['summary_text'], metadata=doc.metadata)
+        #modified_documents.append(modified_doc)
+    #return modified_documents
 
 @cl.on_message
 async def main(message: cl.Message):
