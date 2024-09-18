@@ -12,9 +12,9 @@ output_topic = app.topic(os.environ["output"])
 
 sdf = app.dataframe(input_topic)
 
-# put transformation logic here
-# see docs for what you can do
-# https://quix.io/docs/get-started/quixtour/process-threshold.html
+sdf = sdf.apply(lambda row: row["event"])
+
+sdf = sdf[["ts", "text"]]
 
 sdf.print()
 sdf.to_topic(output_topic)
