@@ -1,0 +1,31 @@
+name: Environment Source 2
+language: python
+variables:
+  - name: topic
+    inputType: OutputTopic
+    description: The Quix topic that will be mirrored from the source environment.
+    defaultValue: slack-raw
+    required: false
+  - name: source_workspace_id
+    inputType: FreeText
+    description: Source workspace ID
+    defaultValue: tomas-docsrag-community
+    required: true
+  - name: source_sdk_token
+    inputType: Secret
+    description: SDK token for source
+    defaultValue: prod_sdk_token
+    required: true
+  - name: consumer_group
+    inputType: FreeText
+    description: Kafka consumer group
+    defaultValue: quix_environment_source
+    required: false
+  - name: auto_offset_reset
+    inputType: FreeText
+    description: Auto offset reset policy
+    defaultValue: earliest
+    required: false
+dockerfile: dockerfile
+runEntryPoint: main.py
+defaultFile: main.py
