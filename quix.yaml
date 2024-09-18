@@ -394,7 +394,7 @@ deployments:
         inputType: FreeText
         description: Kafka consumer group
         required: false
-        value: quix_environment_source_v6
+        value: quix_environment_source_v7
       - name: auto_offset_reset
         inputType: FreeText
         description: Auto offset reset policy
