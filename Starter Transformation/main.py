@@ -16,7 +16,9 @@ sdf = sdf[sdf.contains("event") & sdf["event"].contains("text")]
 
 sdf = sdf.apply(lambda row: row["event"])
 
-sdf = sdf[["ts", "text"]]
+sdf["words_count"] = sdf["text"].apply(lambda text: len(text.split(" ")))
+
+sdf = sdf[["ts", "words_count"]]
 
 sdf.print()
 sdf.to_topic(output_topic)
