@@ -36,7 +36,8 @@ def main():
         quix_sdk_token=source_sdk_token,
         consumer_group=consumer_group,
         auto_offset_reset=auto_offset_reset,
-        shutdown_timeout=30
+        shutdown_timeout=30,
+        consumer_poll_timeout=1
     )
 
     app.add_source(input_topic, output_topic)
