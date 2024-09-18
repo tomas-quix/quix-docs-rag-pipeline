@@ -5,7 +5,7 @@ from quixstreams.sources.kafka import QuixEnvironmentSource
 from dotenv import load_dotenv
 
 def main():
-    app = Application(logLevel=5)
+    app = Application(loglevel=5)
     
     # Load environment variables from .env file for local development
     load_dotenv()
