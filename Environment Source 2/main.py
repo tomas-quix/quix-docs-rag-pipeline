@@ -21,6 +21,12 @@ def main():
     consumer_group = os.environ.get("consumer_group", "quix_environment_source")
     auto_offset_reset = os.environ.get("auto_offset_reset",    "earliest")
 
+    print(os.environ["topic"])
+    print(source_workspace_id)
+    print(source_sdk_token)
+    print(consumer_group)
+    print(auto_offset_reset)
+
     # Setup input topic
     input_topic = QuixEnvironmentSource(
         os.environ["topic"],
