@@ -39,7 +39,7 @@ def main():
 
     #app.add_source(input_topic, output_topic)
     print("CONNECTED!")
-
+    sdf.print()
     # Start the application
     app.run(sdf)
 
