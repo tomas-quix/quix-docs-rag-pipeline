@@ -5,7 +5,7 @@ from quixstreams.sources.kafka import QuixEnvironmentSource
 from dotenv import load_dotenv
 
 def main():
-    app = Application(loglevel=5)
+    app = Application(loglevel=5, )
     
     # Load environment variables from .env file for local development
     load_dotenv()
@@ -21,12 +21,6 @@ def main():
     consumer_group = os.environ.get("consumer_group", "quix_environment_source")
     auto_offset_reset = os.environ.get("auto_offset_reset",    "earliest")
 
-    print(os.environ["topic"])
-    print(source_workspace_id)
-    print(source_sdk_token)
-    print(consumer_group)
-    print(auto_offset_reset)
-
     # Setup input topic
     input_topic = QuixEnvironmentSource(
         os.environ["topic"],
@@ -39,12 +33,15 @@ def main():
         shutdown_timeout=30,
         consumer_poll_timeout=1
     )
+    
 
-    app.add_source(input_topic, output_topic)
+    sdf = app.dataframe(source=input_topic)
+
+    #app.add_source(input_topic, output_topic)
     print("CONNECTED!")
 
     # Start the application
-    app._run()
+    app.run(sdf)
 
 
 if __name__ == "__main__":
