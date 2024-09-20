@@ -14,7 +14,7 @@ sdf = app.dataframe(input_topic)
 
 sdf = sdf.apply(lambda row: row["event"])
 
-sdf = sdf[sdf["type"] == "message"]
+sdf = sdf[sdf.contains("text") & sdf["type"] == "message"]
 
 sdf = sdf[["ts", "text"]]
 
