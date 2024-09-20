@@ -14,6 +14,10 @@ sdf = app.dataframe(input_topic)
 
 sdf = sdf.apply(lambda row: row["event"])
 
+sdf = sdf[sdf["type"] == "message"]
+
+sdf = sdf[["ts", "text"]]
+
 
 sdf.print()
 sdf.to_topic(output_topic)
