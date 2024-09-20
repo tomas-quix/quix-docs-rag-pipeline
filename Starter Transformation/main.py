@@ -12,7 +12,7 @@ output_topic = app.topic(os.environ["output"])
 
 sdf = app.dataframe(input_topic)
 
-sdf = sdf["event"]
+sdf = sdf.apply(lambda row: row["event"])
 
 
 sdf.print()
