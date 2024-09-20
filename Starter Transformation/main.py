@@ -5,7 +5,7 @@ from quixstreams import Application
 from dotenv import load_dotenv
 load_dotenv()
 
-app = Application(consumer_group="transformathhions-v1", auto_offset_reset="earliest")
+app = Application(consumer_group="transformaathhions-v1", auto_offset_reset="earliest")
 
 input_topic = app.topic(os.environ["input"])
 output_topic = app.topic(os.environ["output"])
@@ -15,6 +15,8 @@ sdf = app.dataframe(input_topic)
 sdf = sdf.apply(lambda row: row["event"])
 
 sdf = sdf[sdf.contains("text")]
+
+sdf = sdf[["ts", "message"]]
 
 sdf.print()
 sdf.to_topic(output_topic)
