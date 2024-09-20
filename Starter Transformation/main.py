@@ -16,7 +16,7 @@ sdf = sdf.apply(lambda row: row["event"])
 
 sdf = sdf[sdf.contains("text")]
 
-sdf = sdf[["ts", "message"]]
+sdf = sdf[["ts", "text"]]
 
 sdf.print()
 sdf.to_topic(output_topic)
