@@ -12,6 +12,8 @@ output_topic = app.topic(os.environ["output"])
 
 sdf = app.dataframe(input_topic)
 
+sdf = sdf["event"]
+
 
 sdf.print()
 sdf.to_topic(output_topic)
