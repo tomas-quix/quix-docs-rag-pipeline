@@ -12,7 +12,7 @@ def main():
     # Optional environment variables
     consumer_group = os.environ.get("consumer_group", "quix_environment_source")
 
-    app = Application(loglevel="DEBUG")
+    app = Application(consumer_group=consumer_group, loglevel="DEBUG")
     
     # Setup output topic
     output_topic = app.topic(os.environ["topic"])
