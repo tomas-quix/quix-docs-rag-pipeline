@@ -26,7 +26,7 @@ def main():
 
     # Setup input topic
     input_topic = QuixEnvironmentSource(
-        name=consumer_group,
+        name=source_workspace_id + '-' + consumer_group,
         app_config=app.config,
         topic=os.environ["topic"],
         quix_workspace_id=source_workspace_id, 
