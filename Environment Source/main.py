@@ -9,6 +9,9 @@ def main():
     # Load environment variables from .env file for local development
     load_dotenv()
 
+    # Optional environment variables
+    consumer_group = os.environ.get("consumer_group", "quix_environment_source")
+
     app = Application(loglevel="DEBUG")
     
     # Setup output topic
@@ -18,18 +21,16 @@ def main():
     source_workspace_id = os.environ["source_workspace_id"]
     source_sdk_token = os.environ["source_sdk_token"]
     
-    # Optional environment variables
-    consumer_group = os.environ.get("consumer_group", "quix_environment_source")
+
     auto_offset_reset = os.environ.get("auto_offset_reset",    "earliest")
 
     # Setup input topic
     input_topic = QuixEnvironmentSource(
-        os.environ["topic"],
+        consumer_group,
         app.config,
         os.environ["topic"],
         quix_workspace_id=source_workspace_id, 
         quix_sdk_token=source_sdk_token,
-        consumer_group=consumer_group,
         auto_offset_reset=auto_offset_reset,
         shutdown_timeout=30
     )
