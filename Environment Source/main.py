@@ -5,10 +5,11 @@ from quixstreams.sources.kafka import QuixEnvironmentSource
 from dotenv import load_dotenv
 
 def main():
-    app = Application(loglevel="DEBUG")
     
     # Load environment variables from .env file for local development
     load_dotenv()
+
+    app = Application(loglevel="DEBUG")
     
     # Setup output topic
     output_topic = app.topic(os.environ["topic"])
