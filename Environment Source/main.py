@@ -24,7 +24,7 @@ def main():
 
     auto_offset_reset = os.environ.get("auto_offset_reset",    "earliest")
 
-    source_name = source_workspace_id + '-' + consumer_group
+    source_name = 'tomas-docsrag-production' + '-' + consumer_group
     print('SOURCE NAME:', source_name)
     # Setup input topic
     input_topic = QuixEnvironmentSource(
