@@ -26,9 +26,9 @@ def main():
 
     # Setup input topic
     input_topic = QuixEnvironmentSource(
-        consumer_group,
-        app.config,
-        os.environ["topic"],
+        name=consumer_group,
+        app_config=app.config,
+        topic=os.environ["topic"],
         quix_workspace_id=source_workspace_id, 
         quix_sdk_token=source_sdk_token,
         auto_offset_reset=auto_offset_reset,
