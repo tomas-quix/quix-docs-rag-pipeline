@@ -24,11 +24,9 @@ def main():
 
     auto_offset_reset = os.environ.get("auto_offset_reset",    "earliest")
 
-    source_name = 'tomas-docsrag-community-' + consumer_group
-    print('SOURCE NAME:', source_name)
     # Setup input topic
     input_topic = QuixEnvironmentSource(
-        name=source_name,
+        name=consumer_group,
         app_config=app.config,
         topic=os.environ["topic"],
         quix_workspace_id=source_workspace_id, 
