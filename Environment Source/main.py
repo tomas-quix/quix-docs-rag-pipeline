@@ -12,7 +12,7 @@ def main():
     # Optional environment variables
     consumer_group = os.environ.get("consumer_group", "quix_environment_source")
 
-    app = Application(consumer_group=consumer_group, loglevel="DEBUG")
+    app = Application(consumer_group=consumer_group)
     
     # Setup output topic
     output_topic = app.topic(os.environ["topic"])
@@ -22,7 +22,7 @@ def main():
     source_sdk_token = os.environ["source_sdk_token"]
     
 
-    auto_offset_reset = os.environ.get("auto_offset_reset",    "earliest")
+    auto_offset_reset = os.environ.get("auto_offset_reset", "earliest")
 
     # Setup input topic
     input_topic = QuixEnvironmentSource(
@@ -32,9 +32,7 @@ def main():
         quix_workspace_id=source_workspace_id, 
         quix_sdk_token=source_sdk_token,
         auto_offset_reset=auto_offset_reset,
-        shutdown_timeout=30,
-        consumer_extra_config={'debug': 'all'}
-        
+        shutdown_timeout=30
     )
 
     app.add_source(input_topic, output_topic)
