@@ -32,7 +32,9 @@ def main():
         quix_workspace_id=source_workspace_id, 
         quix_sdk_token=source_sdk_token,
         auto_offset_reset=auto_offset_reset,
-        shutdown_timeout=30
+        shutdown_timeout=30,
+        consumer_extra_config={'debug': 'all'}
+        
     )
 
     app.add_source(input_topic, output_topic)
